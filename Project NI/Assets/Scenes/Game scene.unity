@@ -123,6 +123,67 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &87075590
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4644453663586560000, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: repeaterInterval
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5156493289355796182, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
+      propertyPath: m_Name
+      value: PlayerTest
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
 --- !u!1 &287252920
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,15 +213,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0189adb9af31c724ab6d400499b3aff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletInfo:
-  - name: BTest
-    prefab: {fileID: 7017166102434676178, guid: 9c3ffd90319451c459251393dc026464, type: 3}
-    count: 5
-  enemyInfo:
-  - name: Test1
-    prefab: {fileID: 2017320095325697137, guid: eb367df64df85be44b68601c56053dbf, type: 3}
+  BulletPool: {fileID: 287252922}
+  bulletinfo:
+  - name: Test
+    prefab: {fileID: 6340139282222604332, guid: fa5106439c1f6c54cb2a4552d9f45f68, type: 3}
     count: 10
-  parent: {fileID: 287252922}
+  bulletList: []
 --- !u!4 &287252922
 Transform:
   m_ObjectHideFlags: 0
@@ -345,7 +403,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1365224192}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
