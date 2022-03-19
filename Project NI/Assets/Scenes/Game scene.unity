@@ -152,8 +152,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0189adb9af31c724ab6d400499b3aff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletInfo: []
-  enemyInfo: []
+  bulletInfo:
+  - name: TestBullet
+    prefab: {fileID: 1576192353937467779, guid: 6b3becfcaa087704a8db27b5fc061cab, type: 3}
+    count: 1
+  enemyInfo:
+  - name: TestObj
+    prefab: {fileID: 8233294036289490415, guid: 864183923f8f9f04c9e507325d28cfc9, type: 3}
+    count: 1
   parent: {fileID: 287252922}
 --- !u!4 &287252922
 Transform:
