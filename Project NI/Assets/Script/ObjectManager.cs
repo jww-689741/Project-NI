@@ -44,6 +44,7 @@ public class ObjectManager : MonoBehaviour
     private void Start()
     {
         enemyList = new List<Queue<GameObject>>();
+        InsertObject();
     }
 
     private void InsertObject() // 정보가 등록된 오브젝트 큐를 리스트에 저장하는 메소드
