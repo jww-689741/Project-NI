@@ -10,12 +10,14 @@ public class PlayerControl : MonoBehaviour
     private bool repeaterLock; // 연사 여부
     private delegate void Control();
     Control control;
+    private Rigidbody playerRigidbody;
 
     private void Start()
     {
         repeaterLock = true; // 연사 활성화
         control = Shot;
         control += Movement;
+        playerRigidbody = this.GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -37,10 +39,11 @@ public class PlayerControl : MonoBehaviour
     private void Movement()
     {
         // 플레이어가 이동하는 방향과 속도를 삽입한 벡터 - 마우스 휠 컨트롤 삽입 필요
-        Vector3 movementVector = new Vector3(Input.GetAxisRaw("Horizontal") * movementSpeed * Time.deltaTime,
-            Input.GetAxisRaw("Vertical") * movementSpeed * Time.deltaTime,
-            0);
-        this.GetComponent<Rigidbody>().AddForce(movementVector,ForceMode.VelocityChange);
+        float movementX = Input.GetAxis("XMove");
+        float movementY = Input.GetAxis("YMove");
+        float movementZ = Input.GetAxis("ZMove");
+        Vector3 movementVector = new Vector3(movementX, movementY, movementZ) * movementSpeed;
+        playerRigidbody.velocity = movementVector;
     } 
 
     // 탄환 연사 코루틴
