@@ -4,22 +4,27 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    public float repeaterInterval; // 연사 속도
-    
+    public float repeaterInterval; // 연사속도
+    public float movementSpeed; // 이동속도
+
     private bool repeaterLock; // 연사 여부
+    private delegate void Control();
+    Control control;
 
     private void Start()
     {
         repeaterLock = true; // 연사 활성화
+        control = Shot;
+        control += Movement;
     }
 
     private void Update()
     {
-        Control(); // 실시간 조작 감지
+        control();
     }
 
-    // 플레이어 조작
-    public void Control()
+    // 탄환 발사
+    private void Shot()
     {
         if (Input.GetMouseButtonDown(0)) // 마우스 좌클릭 유지중일 때
         {
@@ -27,6 +32,16 @@ public class PlayerControl : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(0)) repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
     }
+
+    // 플레이어 이동
+    private void Movement()
+    {
+        // 플레이어가 이동하는 방향과 속도를 삽입한 벡터 - 마우스 휠 컨트롤 삽입 필요
+        Vector3 movementVector = new Vector3(Input.GetAxisRaw("Horizontal") * movementSpeed * Time.deltaTime,
+            Input.GetAxisRaw("Vertical") * movementSpeed * Time.deltaTime,
+            0);
+        this.GetComponent<Rigidbody>().AddForce(movementVector,ForceMode.VelocityChange);
+    } 
 
     // 탄환 연사 코루틴
     IEnumerator Repeater()
