@@ -5,8 +5,15 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float shotSpeed; // 발사 속도
+
+    private Transform startTransform;
+
+    private void Start()
+    {
+        startTransform = this.transform;
+    }
     // 탄환 발사 코루틴
-    IEnumerator Shot()
+    IEnumerator Shot(Vector3 aimingPoint)
     {
         float timer = 0;
         while (true)
@@ -14,7 +21,7 @@ public class Bullet : MonoBehaviour
             timer += Time.deltaTime;
             if (timer > 2) break;
 
-            transform.Translate(Vector3.forward * Time.deltaTime * shotSpeed); // 탄환 발사
+            transform.Translate(aimingPoint * Time.deltaTime * shotSpeed); // 탄환 발사
             yield return null; // 코루틴 딜레이 없음
         }
 

@@ -11,19 +11,36 @@ public class PlayerControl : MonoBehaviour
     private delegate void Control();
     Control control;
     private Rigidbody playerRigidbody;
+    private Camera camera;
+    private RaycastHit hit;
+    private Vector3 shotPoint;
 
     private void Start()
     {
         repeaterLock = true; // 연사 활성화
-        control = Shot;
+        control = Aiming;
         control += Movement;
+        control += Shot;
         playerRigidbody = this.GetComponent<Rigidbody>();
+        camera = Camera.main; // 메인 카메라 컴포넌트를 가져옴
     }
 
     private void Update()
     {
         control();
     }
+
+    // 조준
+    private void Aiming() {
+
+        // 화면 상의 마우스 포인터 위치로 레이캐스팅
+        if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit))
+        {
+            shotPoint = new Vector3(hit.point.x * 2f, hit.point.y, 15);
+            Debug.Log(shotPoint);
+        }
+    }
+
 
     // 탄환 발사
     private void Shot()
@@ -52,20 +69,20 @@ public class PlayerControl : MonoBehaviour
         repeaterLock = true; // 연사 활성화
         while (repeaterLock)
         {
-            SetBulletField(ObjectManager.instance.GetBullet("Test")); // 탄환 발사
+            SetBullet(ObjectManager.instance.GetBullet("Test")); // 탄환 발사
             yield return new WaitForSeconds(repeaterInterval); // 연사시간만큼 대기
         }
     }
 
-    // 탄환 오브젝트 위치 지정, 회전각도 설정, 오브젝트 활성화
-    void SetBulletField(GameObject bullet)
+    // 탄환 오브젝트 위치 지정, 회전각도 설정, 오브젝트 활성화, 실제 발사 로직 작동
+    private void SetBullet(GameObject bullet)
     {
         if (bullet == null) return; // 받아올 탄환이 없을 경우 반환
 
         bullet.transform.position = this.transform.position; // 위치 지정
         bullet.transform.rotation = this.transform.rotation; // 회전각 지정
         bullet.SetActive(true); // 활성화
-        bullet.GetComponent<Bullet>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
+        bullet.GetComponent<Bullet>().StartCoroutine("Shot", shotPoint); // 탄환 동작 로직 코루틴 시작
     }
 
 }
