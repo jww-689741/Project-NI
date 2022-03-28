@@ -13,11 +13,12 @@ public class PlayerControl : MonoBehaviour
     private Rigidbody playerRigidbody;
     private Camera camera;
     private RaycastHit hit;
-    private Vector3 shotPoint;
+    private Vector3[] shotPoint;
 
     private void Start()
     {
         repeaterLock = true; // 연사 활성화
+        shotPoint = new Vector3[2];
         control = Aiming;
         control += Movement;
         control += Shot;
@@ -36,8 +37,7 @@ public class PlayerControl : MonoBehaviour
         // 화면 상의 마우스 포인터 위치로 레이캐스팅
         if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit))
         {
-            shotPoint = new Vector3(hit.point.x * 2f, hit.point.y, 15);
-            Debug.Log(shotPoint);
+            shotPoint[0] = new Vector3(hit.point.x, hit.point.y, hit.point.z);
         }
     }
 
@@ -79,7 +79,8 @@ public class PlayerControl : MonoBehaviour
     {
         if (bullet == null) return; // 받아올 탄환이 없을 경우 반환
 
-        bullet.transform.position = this.transform.position; // 위치 지정
+        bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z + 0.6f)); // 위치 지정
+        shotPoint[1] = new Vector3(bullet.transform.position.x, bullet.transform.position.y, bullet.transform.position.z);
         bullet.transform.rotation = this.transform.rotation; // 회전각 지정
         bullet.SetActive(true); // 활성화
         bullet.GetComponent<Bullet>().StartCoroutine("Shot", shotPoint); // 탄환 동작 로직 코루틴 시작
