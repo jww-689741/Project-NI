@@ -123,76 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
-<<<<<<< HEAD:Project NI/Assets/Scenes/Game scene.unity
---- !u!1001 &87075590
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 723388980275032597, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4644453663586560000, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: movementSpeed
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4644453663586560000, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: repeaterInterval
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5156493289355796182, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
-      propertyPath: m_Name
-      value: PlayerTest
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: da37e5f34d61700469262f93c868cdd7, type: 3}
---- !u!1 &287252920
-=======
 --- !u!1 &705507993
->>>>>>> origin/Pks:Project NI/Assets/Scenes/Memorypool_test.unity
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -200,62 +131,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-<<<<<<< HEAD:Project NI/Assets/Scenes/Game scene.unity
-  - component: {fileID: 287252922}
-  - component: {fileID: 287252921}
-  m_Layer: 0
-  m_Name: ObjectStorage
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &287252921
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 287252920}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0189adb9af31c724ab6d400499b3aff1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BulletPool: {fileID: 287252922}
-  bulletinfo:
-  - name: Test
-    prefab: {fileID: 6340139282222604332, guid: fa5106439c1f6c54cb2a4552d9f45f68, type: 3}
-    count: 10
-  bulletList: []
---- !u!4 &287252922
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 287252920}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &955185395
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 955185397}
-  - component: {fileID: 955185396}
-=======
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
->>>>>>> origin/Pks:Project NI/Assets/Scenes/Memorypool_test.unity
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -347,16 +224,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-<<<<<<< HEAD:Project NI/Assets/Scenes/Game scene.unity
-  - component: {fileID: 1365224195}
-  - component: {fileID: 1365224194}
-  - component: {fileID: 1365224193}
-  - component: {fileID: 1365224196}
-=======
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
->>>>>>> origin/Pks:Project NI/Assets/Scenes/Memorypool_test.unity
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -469,20 +339,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1095171741}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-<<<<<<< HEAD:Project NI/Assets/Scenes/Game scene.unity
-  m_LocalPosition: {x: 0, y: 3, z: -10}
-=======
   m_LocalPosition: {x: -0.28541118, y: 1.2367992, z: -0.072717756}
->>>>>>> origin/Pks:Project NI/Assets/Scenes/Memorypool_test.unity
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD:Project NI/Assets/Scenes/Game scene.unity
---- !u!65 &1365224196
-BoxCollider:
-=======
 --- !u!1 &2070350123 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 920546229872602522, guid: 257407fda7e17234c97204a046b0dd76, type: 3}
@@ -495,20 +357,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
 --- !u!54 &2070350129
 Rigidbody:
->>>>>>> origin/Pks:Project NI/Assets/Scenes/Memorypool_test.unity
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< HEAD:Project NI/Assets/Scenes/Game scene.unity
-  m_GameObject: {fileID: 1365224192}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 10}
-=======
   m_GameObject: {fileID: 2070350123}
   serializedVersion: 2
   m_Mass: 1
@@ -584,4 +436,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 257407fda7e17234c97204a046b0dd76, type: 3}
->>>>>>> origin/Pks:Project NI/Assets/Scenes/Memorypool_test.unity
