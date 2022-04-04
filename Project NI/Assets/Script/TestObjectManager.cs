@@ -3,15 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-// 탄환 오브젝트 기본 정보
-[Serializable]
-public class BulletInfo
-{
-    public string name; // 이름
-    public GameObject prefab; // 오브젝트
-    public int count; // 생성 카운트
-}
-
+// 적 오브젝트 기본 정보
 [Serializable]
 public class EnemyInfo
 {
@@ -20,6 +12,7 @@ public class EnemyInfo
     public int count; // 생성 카운트
 }
 
+// BulletInfo는 기존 오브젝트 메니저 파일과 충돌이 일어나서 삭제함
 public class TestObjectManager : MonoBehaviour
 {
     // 싱글톤
@@ -130,49 +123,42 @@ public class TestObjectManager : MonoBehaviour
         return null; // 호출 할 탄환의 이름을 찾지 못한 경우 null반환
     }
 
+    // 적 다중 호출
     public GameObject[] GetEnemy(string name, int count)
     {
-        int stack = 0;
-        GameObject[] target = new GameObject[count];
-        GameObject targetEnemy;
+        GameObject[] target = new GameObject[count]; // 가져갈 적 오브젝트 저장용 배열
+        GameObject targetEnemy; // 임시 저장용 오브젝트
 
-        for (int z = stack; z < count; z++)
+        for (int z = 0; z < count; z++) // 필요로 하는 오브젝트 수 만큼 반복
         {
-            for (int i = 0 + z; i < enemyList.Count; i++)
+            for (int i = 0 + z; i < enemyList.Count; i++) // 현재 오브젝트 풀링에 저장되어 있는 적 오브젝트 수 만큼 반복
             {
-                if(enemyList[i].activeSelf == false) 
+                if(enemyList[i].activeSelf == false) // 오브젝트 풀링의 i번째 적 오브젝트가 비활성화 상태일 때
                 {
-                    if (enemyList[i].name == name)
+                    if (enemyList[i].name == name) // 해당 오브젝트와 원하는 오브젝트의 이름이 같을 때
                     {
-                        targetEnemy = enemyList[i];
-                        int j = 0;
+                        targetEnemy = enemyList[i]; // target에 해당 오브젝트 임시 저장
+                        int j = 0; // 선언을 for문이 아닌 여기서 하는 이유는 아래의 if문에서 사용하기 위함
 
-                        for (j = 0; j < z; j++)
+                        for (j = 0; j < z; j++) // 가져가기로한 적 오브젝트 수만큼 반복
                         {
-                            if (i == enemyList.Count - 1)
+                            if (i == enemyList.Count - 1) // 이번이 리스트 마지막이라면, 해당 부분으로 인해 1개의 추가 요소 생성됨, 수정필요
                             {
-                                SetEnemy(targetEnemy, 1, targetEnemy.name);
+                                SetEnemy(targetEnemy, 1, targetEnemy.name); // 새로 만들기
                             }
 
-                            if (targetEnemy == target[j])
+                            if (targetEnemy == target[j]) // 해당 오브젝트가 이미 가져갈 목록에 있다면 
                             {
-                                break;
+                                break; // 반복문 종료
                             }
                         }
 
-                        if (j == z)
+                        if (j == z) // 반복문이 끝까지 돌았을 때, 즉 해당 오브젝트가 가져갈 목록에 없다면
                         {
-                            target[z] = targetEnemy;
-                            break;
+                            target[z] = targetEnemy; // 해당 오브젝트를 가져갈 목록에 넣는다.
+                            break; // 반복문 종료
                         }
                     }
-                }
-
-                if (i == enemyList.Count - 1)
-                {
-                    targetEnemy = enemyList[i];
-                    SetEnemy(targetEnemy, 1, targetEnemy.name);
-                    continue;
                 }
             }
         }
