@@ -1,0 +1,19 @@
+diff a/Project NI/Assets/Scenes/Game scene.unity b/Project NI/Assets/Scenes/Game scene.unity	(rejected hunks)
+@@ -218,11 +218,17 @@
+   m_Name: 
+   m_EditorClassIdentifier: 
+   BulletPool: {fileID: 287252922}
++  EnemyPool: {fileID: 0}
+   bulletinfo:
+   - name: Test
+     prefab: {fileID: 6340139282222604332, guid: fa5106439c1f6c54cb2a4552d9f45f68, type: 3}
+     count: 10
++  - name: Test2
++    prefab: {fileID: 8421086206307330582, guid: 6ee4b44e43241784b988440d713e39c7, type: 3}
++    count: 5
+   bulletList: []
++  enemyinfo: []
++  enemyList: []
+ --- !u!4 &287252922
+ Transform:
+   m_ObjectHideFlags: 0
