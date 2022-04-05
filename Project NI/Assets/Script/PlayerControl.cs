@@ -50,6 +50,18 @@ public class PlayerControl : MonoBehaviour
             StartCoroutine("Repeater");
         }
         else if (Input.GetMouseButtonUp(0)) repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
+
+        if (Input.GetMouseButtonDown(1)) // 마우스 우클릭 유지중일 때
+        {
+            StartCoroutine("Repeater1");
+        }
+        else if (Input.GetMouseButtonUp(1)) repeaterLock = false; // 마우스 우클릭에서 손을 뗄때
+
+        if (Input.GetMouseButtonDown(4)) // 마우스 추가버튼 유지중일때
+        {
+            StartCoroutine("Repeater2");
+        }
+        else if (Input.GetMouseButtonUp(4)) repeaterLock = false; // 마우스 추가버튼에서 손을 뗄때
     }
 
     // 플레이어 이동
@@ -69,21 +81,57 @@ public class PlayerControl : MonoBehaviour
         repeaterLock = true; // 연사 활성화
         while (repeaterLock)
         {
-            SetBullet(ObjectManager.instance.GetBullet("Test")); // 탄환 발사
+            SetBullet(ObjectManager.instance.GetBullet("Test"),0); // 탄환 발사
+            yield return new WaitForSeconds(repeaterInterval); // 연사시간만큼 대기
+        }
+    }
+
+    IEnumerator Repeater1()
+    {
+        repeaterLock = true; // 연사 활성화
+        while (repeaterLock)
+        {
+            SetBullet(ObjectManager.instance.GetBullet("Test"), 1); // 탄환 발사
+            yield return new WaitForSeconds(repeaterInterval); // 연사시간만큼 대기
+        }
+    }
+
+    IEnumerator Repeater2()
+    {
+        repeaterLock = true; // 연사 활성화
+        while (repeaterLock)
+        {
+            SetBullet(ObjectManager.instance.GetBullet("Test2"), 2); // 탄환 발사
             yield return new WaitForSeconds(repeaterInterval); // 연사시간만큼 대기
         }
     }
 
     // 탄환 오브젝트 위치 지정, 회전각도 설정, 오브젝트 활성화, 실제 발사 로직 작동
-    private void SetBullet(GameObject bullet)
+    private void SetBullet(GameObject bullet,int type)
     {
         if (bullet == null) return; // 받아올 탄환이 없을 경우 반환
+        if(type == 0)
+        {
+            bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z + 1.5f)); // 위치 지정
+            shotPoint[1] = new Vector3(bullet.transform.position.x, bullet.transform.position.y, bullet.transform.position.z);
+            bullet.transform.rotation = this.transform.rotation; // 회전각 지정
+            bullet.SetActive(true); // 활성화
+            bullet.GetComponent<Bullet>().StartCoroutine("Shot", shotPoint); // 탄환 동작 로직 코루틴 시작
+        }else if(type == 1){
+            bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z + 1.5f)); // 위치 지정
+            shotPoint[1] = new Vector3(bullet.transform.position.x, bullet.transform.position.y, bullet.transform.position.z);
+            bullet.transform.rotation = this.transform.rotation; // 회전각 지정
+            bullet.SetActive(true); // 활성화
+            bullet.GetComponent<Bullet2>().StartCoroutine("Shot", shotPoint); // 탄환 동작 로직 코루틴 시작
+        }else if (type == 2)
+        {
+            bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z + 1.5f)); // 위치 지정
+            shotPoint[1] = new Vector3(bullet.transform.position.x, bullet.transform.position.y, bullet.transform.position.z);
+            bullet.transform.rotation = this.transform.rotation; // 회전각 지정
+            bullet.SetActive(true); // 활성화
+            bullet.GetComponent<Bullet3>().StartCoroutine("Shot", shotPoint); // 탄환 동작 로직 코루틴 시작
+        }
 
-        bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z + 0.6f)); // 위치 지정
-        shotPoint[1] = new Vector3(bullet.transform.position.x, bullet.transform.position.y, bullet.transform.position.z);
-        bullet.transform.rotation = this.transform.rotation; // 회전각 지정
-        bullet.SetActive(true); // 활성화
-        bullet.GetComponent<Bullet>().StartCoroutine("Shot", shotPoint); // 탄환 동작 로직 코루틴 시작
     }
 
 }
