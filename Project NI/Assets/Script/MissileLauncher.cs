@@ -10,7 +10,7 @@ public class MissileLauncher : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))                //스페이스바 -> 미사일 생성 -> 위로 발사
+        if(Input.GetKeyDown(KeyCode.Y))                //스페이스바 -> 미사일 생성 -> 위로 발사
         {
             GameObject t_missile = Instantiate(m_goMissile, m_tfMissileSpawn.position, Quaternion.identity);
             t_missile.GetComponent<Rigidbody>().velocity = Vector3.up * 5f;

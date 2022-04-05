@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4731573529970295438}
   - component: {fileID: 7007916085142154335}
   - component: {fileID: -2032672242803028814}
-  - component: {fileID: -3986544606804784157}
+  - component: {fileID: 39008184074606302}
   m_Layer: 0
   m_Name: Shotgun
   m_TagString: Untagged
@@ -67,7 +67,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-3986544606804784157
+--- !u!114 &39008184074606302
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -76,10 +76,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8421086206307330582}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75909c6042501d848b0428f04c0a899f, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f2691b92baf7a147a922a4dbee5e126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shotSpeed: 50
+  playerShotSpeed: 50
+  SatelliteShotSpeed: 60
+  firingAngle: 45
+  gravity: 9.8
+  weight: 1.3
 --- !u!1001 &285205650489680915
 PrefabInstance:
   m_ObjectHideFlags: 0

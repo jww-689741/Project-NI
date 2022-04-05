@@ -28,7 +28,7 @@ public class Missile : MonoBehaviour
         //yield return new WaitForSeconds(0.1f);  //0.1초 대기
 
         SearchEnemy(); //적 탐지
-        m_psEffect.Play();  //파티클 시작
+        // m_psEffect.Play();  //파티클 시작
 
         yield return new WaitForSeconds(5f);   //5초가 지나도 아무일 없으면 미사일 파괴
         Destroy(gameObject);
