@@ -22,25 +22,26 @@ public class EnemyMove : MonoBehaviour
     {
         watch = new System.Diagnostics.Stopwatch(); // 곡선 이동 테스트 용
         watch.Start(); // 곡선 이동 테스트 용
-        startTime = Time.time;
         position = this.gameObject.transform.position; // 초기 좌표를 목표 좌표에 입력, 대형을 유지하기 위해 필요
         player = GameObject.FindGameObjectWithTag("Player"); // 플레이어 오브젝트 가져오기
         rb = this.gameObject.GetComponent<Rigidbody>(); // 리지드 바디
 
         // 델리게이트 합연산
         //control += move; // 이동 메소드
-        control += p5; // 이동 메소드
+        control += p3; // 이동 메소드
         //control += CheckActive; // 활성화 여부 결정 메소드
     }
 
-    float t;
-    float startTime;
+    float t = 0.0f;
     void Update()
     {
         control(); // 델리게이트 control 실행
-        t = ((Time.time - startTime) / (watch.ElapsedMilliseconds)) * 550;
 
-        run(t); // 곡선 이동 테스트
+        if (t <= 1)
+        {
+            run(t);
+            t += 0.02f;
+        }
     }
 
     // 이동 메소드
@@ -193,8 +194,6 @@ public class EnemyMove : MonoBehaviour
             count++;
         }
 
-        if (position == mep) // 목표 좌표와 현재 좌표가 같을 때 실행
-        {
             if (mep.x == target.x && mep.z == 80) // 시작 지점일 때
             {
                 // 다음 지점 설정
@@ -240,7 +239,7 @@ public class EnemyMove : MonoBehaviour
             {
                 ChangeVector3ToPlayer(x, y, z - player.transform.position.z); // 지정 좌표로 이동, 플레이어의 z축 이동이 보류됨에 따른 - 연산
             }
-        }
+        
     }
 
     // 플레이어에게 이동하다가 플레이어와 20(z)만큼 가까워지면 플레이어 옆으로 지나간다. 얼마나 빗겨갈지는 현재 랜덤

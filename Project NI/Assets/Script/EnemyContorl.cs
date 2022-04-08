@@ -27,7 +27,7 @@ public class EnemyContorl : MonoBehaviour
         int i = 0; // counts 용
         bool stop = true;
 
-        counts.Add(10); // counts에 1 추가
+        counts.Add(1); // counts에 1 추가
 
         while (stop) // stop이 true일 동안 반복
         {
