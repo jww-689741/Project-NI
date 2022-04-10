@@ -11,6 +11,9 @@ public class EnemyMove : MonoBehaviour
     public float height = 1.0f;
 
     private bool patternFlag = false; // 패턴 최초 실행 확인용
+    private bool confirmDoneFlag = false; // 곡선이동 초기 좌표 지정 확인
+
+    private Vector3 startPoint = Vector3.zero; // 곡선이동 초기 좌표
     private Vector3 target = Vector3.zero; // 목표 지점 임시 저장용 벡터 값, 현재 위치와 비교할 때 사용
     private Vector3 position = Vector3.zero; // 목표 지점 벡터 값, 이 값으로 오브젝트가 움직인다.
     private Rigidbody rb; // 리지드 바디
@@ -101,6 +104,11 @@ public class EnemyMove : MonoBehaviour
     // 곡선 이동, 변경 예정, 테스트 중
     void run(float t)
     {
+        if (!confirmDoneFlag)
+        {
+            startPoint = enemyTransform.position; // 해당 오브젝트 현재 좌표 가져오기
+            confirmDoneFlag = true;
+        }
         Vector3 mep = enemyTransform.position; // 해당 오브젝트 현재 좌표 가져오기
 
         Vector3 startHeightPos = mep + new Vector3(0, 1, 0) * height;
@@ -164,22 +172,7 @@ public class EnemyMove : MonoBehaviour
         bool change = false; // 목표 좌표값 변경 확인용 
 
         float x = 0;
-        float y = 0;
         float z = 0;
-
-        if (!patternFlag) // 해당 패턴을 처음 실행할 때
-        {
-            patternFlag = true;
-            // 시작 지점으로 이동
-            x = 30 + player.position.x;
-            y = Random.Range(-10, 10);
-            z = 80;
-
-            target = new Vector3(x, y, z); // 다음 이동
-
-            ChangeTarget(x, y, z);
-
-        }
 
         if (position == mep) // 목표 좌표와 현재 좌표가 같을 때 실행
         {
@@ -187,46 +180,39 @@ public class EnemyMove : MonoBehaviour
             {
                 // 다음 지점 설정
                 x = -30;
-                y = Random.Range(-20, 20);
                 z = 60;
 
-                change = true; // 이동을 위한 true
                 target.x = x + player.position.x;
             }
             else if (mep.x == target.x && mep.z == 60) // 1 지점일 때
             {
                 // 다음 지점 설정
                 x = 30;
-                y = Random.Range(-20, 20);
                 z = 40;
 
-                change = true; // 이동을 위한 true
                 target.x = x + player.position.x;
             }
             else if (mep.x == target.x && mep.z == 40) // 2 지점일 때
             {
                 // 다음 지점 설정
                 x = -30;
-                y = Random.Range(-20, 20);
                 z = 20;
 
-                change = true; // 이동을 위한 true
                 target.x = x + player.position.x;
             }
             else if (mep.x == target.x && mep.z == 20) // 3 지점일 때
             {
                 // 다음 지점 설정
                 x = 30;
-                y = Random.Range(-20, 20);
                 z = 0;
 
-                change = true; // 이동을 위한 true
                 target.x = x + player.position.x;
             }
+            change = true; // 이동을 위한 true
 
             if (change) // 위 if 문에서 값이 변경 될 때
             {
-                ChangeTargetToPlayer(x, y, z - player.position.z); // 지정 좌표로 이동, 플레이어의 z축 이동이 보류됨에 따른 - 연산
+                ChangeTargetToPlayer(x, Random.Range(-20, 20), z - player.position.z); // 지정 좌표로 이동, 플레이어의 z축 이동이 보류됨에 따른 - 연산
             }
         }
     }
@@ -248,19 +234,17 @@ public class EnemyMove : MonoBehaviour
         Vector3 mep = enemyTransform.position; // 해당 오브젝트 현재 좌표 가져오기
 
         float x = 0;
-        float y = 0;
         float z = 0;
 
         bool change = false; // 목표 좌표값 변경 확인용 
 
-        if (position == enemyTransform.position) // 목표 좌표와 현재 좌표가 같을 때 실행
+        if (mep == enemyTransform.position) // 목표 좌표와 현재 좌표가 같을 때 실행
         {
             // 오브젝트가 플레이어 기준 왼쪽에 있고, 플레이어 기준 z 값이 45 보다 높을 때
             if (mep.x < player.position.x && mep.z > player.position.z + 45)
             {
                 // 다음 지점 설정
                 x = 30;
-                y = Random.Range(-10, 10);
                 z = 80;
 
                 change = true; // 이동을 위한 true
@@ -270,7 +254,6 @@ public class EnemyMove : MonoBehaviour
             {
                 // 다음 지점 설정
                 x = 30;
-                y = Random.Range(-10, 10);
                 z = 40;
 
                 change = true; // 이동을 위한 true
@@ -280,7 +263,6 @@ public class EnemyMove : MonoBehaviour
             {
                 // 다음 지점 설정
                 x = -30;
-                y = Random.Range(-10, 10);
                 z = 40;
 
                 change = true; // 이동을 위한 true
@@ -290,7 +272,6 @@ public class EnemyMove : MonoBehaviour
             {
                 // 다음 지점 설정
                 x = -30;
-                y = Random.Range(-10, 10);
                 z = 80;
 
                 change = true; // 이동을 위한 true
@@ -298,8 +279,34 @@ public class EnemyMove : MonoBehaviour
 
             if (change) // 위 if 문에서 값이 변경 될 때, 즉 목표 좌표가 변경될 때
             {
-                ChangeTargetToPlayer(x, y, z - player.position.z); // 지정 좌표로 이동, 플레이어의 z축 이동이 보류됨에 따른 - 연산
+                ChangeTargetToPlayer(x, Random.Range(-20, 20), z - player.position.z); // 지정 좌표로 이동, 플레이어의 z축 이동이 보류됨에 따른 - 연산
             }
+        }
+    }
+
+    // 왕복 이동
+    void RoundTrip()
+    {
+        if (enemyTransform.position == position) // 현재 좌표가 목표 좌표와 같다면 실행
+        {
+            ChangeTargetToPlayer(0, 0, 0); // 플레이어 좌표로 이동
+        }
+
+        if (enemyTransform.position.z < player.position.z + 15) // 플레이어와 15만큼 가까워지면
+        {
+            ChangeTargetToPlayer(Random.Range(-30, 30), Random.Range(-20, 20), Random.Range(60, 100)); // -30~30, -20~20, 60~100의 좌표로 이동한다.
+        }
+    }
+
+    private int DistanceCalculation(float number)
+    {
+        if (number >= 0)
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
         }
     }
 }

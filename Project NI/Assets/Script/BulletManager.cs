@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class BulletManager : MonoBehaviour
 {
-    public float playerShotSpeed; // 발사 속도
-    public float SatelliteShotSpeed; // 발사 속도
+    public float playerShotSpeed; // 플레이어 발사 속도
+    public float satelliteShotSpeed; // 새틀라이트 발사 속도
+    public float spinnerBulletSpeed; // 회전탄 발사속도
+    public float spinnerBulletInterval = 0.1f; // 회전탄 발사 간격
 
     public float firingAngle = 45.0f;  //각도
     public float gravity = 9.8f;  //중력
     public float weight = 1.3f;   //가중치값
 
+    private float timeTemp;
+
     // 플레이어의 발사 발사 코루틴
     IEnumerator Shot(Vector3[] shotVecter)
     {
-        if(this.gameObject.name == "DirectBullet")
+        if (this.gameObject.name == "DirectBullet")
         {
             Vector3 directionVector = ((shotVecter[0] - shotVecter[1]).normalized); // (마우스 좌표 - 발사 시작지점 좌표).방향벡터
             float timer = 0;
@@ -29,7 +33,7 @@ public class BulletManager : MonoBehaviour
         }
         else if (this.gameObject.name == "HowitzerBullet")
         {
-            yield return new WaitForSeconds(0.5f);   // 0.5초 대기
+            yield return new WaitForSeconds(0.2f);   // 0.2초 대기
                                                      // 대상거리
             float target_Distance = 20f;
 
@@ -51,7 +55,6 @@ public class BulletManager : MonoBehaviour
                 elapse_time += Time.deltaTime;
                 yield return null;
             }
-            gameObject.SetActive(false); // 비활성화
         }
         else if (this.gameObject.name == "Buckshot")
         {
@@ -67,11 +70,38 @@ public class BulletManager : MonoBehaviour
                 }
                 yield return null; // 코루틴 딜레이 없음
             }
-
-            gameObject.SetActive(false); // 비활성화
         }
-
-        gameObject.SetActive(false); // 비활성화
+        else if (this.gameObject.name == "SpinnerBullet")
+        {
+            float timer = 0;
+            int spinnerBulletCount = 0;
+            while (true)
+            {
+                timer += Time.deltaTime;
+                if (timer < spinnerBulletInterval)
+                {
+                    this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * spinnerBulletSpeed);
+                }
+                else if (timer > 2) break;
+                else
+                {
+                    this.gameObject.transform.Rotate(Vector3.up * Time.deltaTime * 30f);
+                    if (timer > spinnerBulletInterval)
+                    {
+                        if (timer > spinnerBulletInterval * 1.5f && spinnerBulletCount < 9)
+                        {
+                            spinnerBulletCount++;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            this.gameObject.transform.GetChild(spinnerBulletCount).GetChild(i).Translate(Vector3.forward * Time.deltaTime * spinnerBulletSpeed);
+                        }
+                    }
+                }
+                yield return null; // 코루틴 딜레이 없음
+            }
+        }
+        this.gameObject.SetActive(false); // 비활성화
     }
 
     // 새틀라이트의 발사 코루틴
@@ -84,7 +114,7 @@ public class BulletManager : MonoBehaviour
             timer += Time.deltaTime;
             if (timer > 2) break;
 
-            transform.Translate(Vector3.forward * Time.deltaTime * SatelliteShotSpeed); // 탄환 발사
+            transform.Translate(Vector3.forward * Time.deltaTime * satelliteShotSpeed); // 탄환 발사
             yield return null; // 코루틴 딜레이 없음
         }
 

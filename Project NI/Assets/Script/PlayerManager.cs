@@ -116,6 +116,21 @@ public class PlayerManager : MonoBehaviour
             if (Time.time - clickTime < repeaterInterval) clickLock = true;
             repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
         }
+        if (Input.GetMouseButtonDown(3) && !clickLock) // 마우스 좌클릭 유지중일 때
+        {
+            clickTime = Time.time;
+            repeaterLock = true; // 연사 활성화
+            while (repeaterLock)
+            {
+                SetBullet(ObjectManager.instance.GetBullet("SpinnerBullet"), "SpinnerBullet"); // 탄환 발사
+                yield return new WaitForSeconds(repeaterInterval); // 연사시간만큼 대기
+            }
+        }
+        else if (Input.GetMouseButtonUp(3)) // 마우스 좌클릭에서 손을 뗄때
+        {
+            if (Time.time - clickTime < repeaterInterval) clickLock = true;
+            repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
+        }
 
     }
 
@@ -140,6 +155,16 @@ public class PlayerManager : MonoBehaviour
             for (int i = 0; i < 5; i++)
             {
                 bullet.transform.GetChild(i).transform.position = bullet.transform.position;  //자식 오브젝트 부모와 동일한 위치로 이동
+            }
+            bullet.GetComponent<BulletManager>().StartCoroutine("Shot", shotPoint); // 탄환 동작 로직 코루틴 시작
+        }
+        else if(name == "SpinnerBullet"){
+            for (int i = 0; i < 10; i++)
+            {
+                for(int j = 0; j < 4; j++)
+                {
+                    bullet.gameObject.transform.GetChild(i).GetChild(j).transform.position = bullet.transform.position;
+                }
             }
             bullet.GetComponent<BulletManager>().StartCoroutine("Shot", shotPoint); // 탄환 동작 로직 코루틴 시작
         }
