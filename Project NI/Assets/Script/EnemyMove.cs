@@ -1,114 +1,132 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// °¢ °³Ã¼´ç °³º° ÀÌµ¿ Å¬·¹½º
+// ê° ê°œì²´ë‹¹ ê°œë³„ ì´ë™ í´ë ˆìŠ¤
 public class EnemyMove : MonoBehaviour
 {
-    Vector3 target = new Vector3(0, 0, 0); // ¸ñÇ¥ ÁöÁ¡ ÀÓ½Ã ÀúÀå¿ë º¤ÅÍ °ª, ÇöÀç À§Ä¡¿Í ºñ±³ÇÒ ¶§ »ç¿ë
-    Vector3 position = new Vector3(0, 0, 0); // ¸ñÇ¥ ÁöÁ¡ º¤ÅÍ °ª, ÀÌ °ªÀ¸·Î ¿ÀºêÁ§Æ®°¡ ¿òÁ÷ÀÎ´Ù.
-    public float movementSpeed = 20; // ÀÌµ¿¼Óµµ
-    GameObject player; // ÇÃ·¹ÀÌ¾î ÁÂÇ¥¸¦ °¡Á®¿À±â À§ÇÑ ¿ÀºêÁ§Æ®
-    Rigidbody rb; // ¸®Áöµå ¹Ùµğ
+    public float repeaterInterval;
+    public float height;
+    public float movementSpeed; // ì´ë™ì†ë„
+    public Transform player; // í”Œë ˆì´ì–´ ì¢Œí‘œë¥¼ ê°€ì ¸ì˜¤ê¸° ìœ„í•œ ì˜¤ë¸Œì íŠ¸
 
-    int count = 0; // ÆĞÅÏ ÃÖÃÊ ½ÇÇà È®ÀÎ¿ë
-    public float height = 1.0f;
+    private Vector3 startPoint = Vector3.zero; // ê³¡ì„ ì´ë™ ì´ˆê¸° ì¢Œí‘œ
+    private Vector3[] shotPoint; // ì  ê³µê²©ìš© ì¢Œí‘œ ë°°ì—´
+    private Vector3 position = Vector3.zero; // ëª©í‘œ ì§€ì  ë²¡í„° ê°’, ì´ ê°’ìœ¼ë¡œ ì˜¤ë¸Œì íŠ¸ê°€ ì›€ì§ì¸ë‹¤.
+    private Rigidbody rb; // ë¦¬ì§€ë“œ ë°”ë””
+    private Transform enemyTransform; // ìê¸° ìì‹ ì˜ ì¢Œí‘œë¥¼ ì €ì¥
+    private bool confirmDoneFlag = false; // ê³¡ì„ ì´ë™ ì´ˆê¸° ì¢Œí‘œ ì§€ì • í™•ì¸
+    private delegate void Control(); // ì´ë™ìš© ë¸ë¦¬ê²Œì´íŠ¸
+    Control control; // ì„ ì–¸
 
-    private delegate void Control(); // ÀÌµ¿¿ë µ¨¸®°ÔÀÌÆ®
-    Control control; // ¼±¾ğ
-
-    System.Diagnostics.Stopwatch watch; // °î¼± ÀÌµ¿ Å×½ºÆ® ¿ë
-    void Start()
+    private void Awake()
     {
-        watch = new System.Diagnostics.Stopwatch(); // °î¼± ÀÌµ¿ Å×½ºÆ® ¿ë
-        watch.Start(); // °î¼± ÀÌµ¿ Å×½ºÆ® ¿ë
-        position = this.gameObject.transform.position; // ÃÊ±â ÁÂÇ¥¸¦ ¸ñÇ¥ ÁÂÇ¥¿¡ ÀÔ·Â, ´ëÇüÀ» À¯ÁöÇÏ±â À§ÇØ ÇÊ¿ä
-        player = GameObject.FindGameObjectWithTag("Player"); // ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ® °¡Á®¿À±â
-        rb = this.gameObject.GetComponent<Rigidbody>(); // ¸®Áöµå ¹Ùµğ
-
-        // µ¨¸®°ÔÀÌÆ® ÇÕ¿¬»ê
-        //control += move; // ÀÌµ¿ ¸Ş¼Òµå
-        control += p3; // ÀÌµ¿ ¸Ş¼Òµå
-        //control += CheckActive; // È°¼ºÈ­ ¿©ºÎ °áÁ¤ ¸Ş¼Òµå
+        enemyTransform = this.gameObject.transform;
     }
 
-    float t = 0.0f;
+    void Start()
+    {
+        shotPoint = new Vector3[2];
+        position = enemyTransform.position; // ì´ˆê¸° ì¢Œí‘œë¥¼ ëª©í‘œ ì¢Œí‘œì— ì…ë ¥, ëŒ€í˜•ì„ ìœ ì§€í•˜ê¸° ìœ„í•´ í•„ìš”
+        rb = GetComponent<Rigidbody>(); // ë¦¬ì§€ë“œ ë°”ë””
+
+        // ë¸ë¦¬ê²Œì´íŠ¸ í•©ì—°ì‚°
+        //control += move; // ì´ë™ ë©”ì†Œë“œ
+        //control += StepMovement;
+        //control += RoundTrip;
+        control += SquareMovement;
+    }
+
+    [Range(0f, 1f)] // 0 ~ 1 ë²”ìœ„ì—ì„œë§Œ ì¡°ì‘ë˜ê²Œ ì œí•œí•˜ê¸° ìœ„í•œ ì„¤ì •
+    public float t = 0f;
+    public float timer = 0;
+
     void Update()
     {
-        control(); // µ¨¸®°ÔÀÌÆ® control ½ÇÇà
+        control(); // ë¸ë¦¬ê²Œì´íŠ¸ control ì‹¤í–‰
+
+        if (timer > 2)
+        {
+            StartCoroutine("Repeater", "DirectBullet");
+            timer = 0;
+        }
+        timer += Time.deltaTime;
 
         if (t <= 1)
         {
             run(t);
-            t += 0.02f;
+            t += Time.deltaTime * 0.6f;
+        } 
+        else
+        {
+            run(1);
+            t = 0.0f;
+            confirmDoneFlag = false;
         }
     }
 
-    // ÀÌµ¿ ¸Ş¼Òµå
+    // ì´ë™ ë©”ì†Œë“œ
     private void move()
     {
-        this.gameObject.transform.LookAt(player.transform); // ÇÃ·¹ÀÌ¾î¸¦ ¹Ù¶óº¸°Ô ÇÑ´Ù.
-        this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, position, movementSpeed * Time.deltaTime); // ÇöÀç ÁÂÇ¥¿¡¼­ ¸ñÇ¥ ÁÂÇ¥·Î ±âÁ¦µÈ ¼Óµµ·Î ÀÌµ¿
+        enemyTransform.LookAt(player); // í”Œë ˆì´ì–´ë¥¼ ë°”ë¼ë³´ê²Œ í•œë‹¤.
+        enemyTransform.position = Vector3.MoveTowards(enemyTransform.position, position, movementSpeed * Time.deltaTime); // í˜„ì¬ ì¢Œí‘œì—ì„œ ëª©í‘œ ì¢Œí‘œë¡œ ê¸°ì œëœ ì†ë„ë¡œ ì´ë™
     }
 
-    // È°¼ºÈ­ °áÁ¤ ¸Ş¼Òµå
-    // ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¼öÁ¤ ÇÊ¿ä¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ
+    // í™œì„±í™” ê²°ì • ë©”ì†Œë“œ
+    // ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ìˆ˜ì • í•„ìš”ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡
     private void CheckActive()
     {
-        if (this.gameObject.transform.position.z < player.transform.position.z - 10) // ÇÃ·¹ÀÌ¾î µÚ·Î 10¸¸Å­ °¬À» ¶§ ºñÈ°¼ºÈ­
+        if (enemyTransform.position.z < player.position.z - 10) // í”Œë ˆì´ì–´ ë’¤ë¡œ 10ë§Œí¼ ê°”ì„ ë•Œ ë¹„í™œì„±í™”
         {
-            this.gameObject.SetActive(false); // ºñÈ°¼ºÈ­
+            this.gameObject.SetActive(false); // ë¹„í™œì„±í™”
         }
-        else if (this.gameObject.transform.position.x < player.transform.position.x - 50) // ÇÃ·¹ÀÌ¾î º¸´Ù 50 ¸¸Å­ ¿ŞÂÊÀ¸·Î °¬À» ¶§ ºñÈ°¼ºÈ­
+        else if (enemyTransform.position.x < player.position.x - 50) // í”Œë ˆì´ì–´ ë³´ë‹¤ 50 ë§Œí¼ ì™¼ìª½ìœ¼ë¡œ ê°”ì„ ë•Œ ë¹„í™œì„±í™”
         {
-            this.gameObject.SetActive(false); // ºñÈ°¼ºÈ­
+            this.gameObject.SetActive(false); // ë¹„í™œì„±í™”
         }
     }
 
-    // µéÀÌ¹Ş±â
+    // ë“¤ì´ë°›ê¸°
     public void MoveToPlayer()
     {
-        position = player.transform.position; // ¸ñÇ¥ ÁÂÇ¥¸¦ ÇÃ·¹ÀÌ¾î ÁÂÇ¥·Î ¼³Á¤
+        position = player.position; // ëª©í‘œ ì¢Œí‘œë¥¼ í”Œë ˆì´ì–´ ì¢Œí‘œë¡œ ì„¤ì •
     }
 
-    // ¸ñÇ¥ ÁÂÇ¥ º¯°æ ¸Ş¼Òµå
-    public void ChangeVector3(float x, float y, float z)
+    // ëª©í‘œ ì¢Œí‘œ ë³€ê²½ ë©”ì†Œë“œ
+    public void ChangeTarget(float x, float y, float z)
     {
         position.x = x;
         position.y = y;
         position.z = z;
     }
 
-    // ÇÃ·¹ÀÌ¾î ±âÁØ ¸ñÇ¥ ÁÂÇ¥ º¯°æ ¸Ş¼Òµå
-    public void ChangeVector3ToPlayer(float x, float y, float z)
+    // í”Œë ˆì´ì–´ ê¸°ì¤€ ëª©í‘œ ì¢Œí‘œ ë³€ê²½ ë©”ì†Œë“œ
+    public void ChangeTargetToPlayer(float x, float y, float z)
     {
-        position.x = x + player.transform.position.x;
-        position.y = y + player.transform.position.y;
-        position.z = z + player.transform.position.z;
+        position.x = x + player.position.x;
+        position.y = y + player.position.y;
+        position.z = z + player.position.z;
     }
 
-    // ÇÃ·¹ÀÌ¾î ±âÁØ È¸Àü ¸Ş¼Òµå
-    // ´Ù¸¥ ÀÌµ¿ ¸Ş¼Òµå¿Í °°ÀÌ ½ÇÇà µÇ¸é ÀÌ»óÇØÁö´Ï ÁÖÀÇ
+    // í”Œë ˆì´ì–´ ê¸°ì¤€ íšŒì „ ë©”ì†Œë“œ
+    // ë‹¤ë¥¸ ì´ë™ ë©”ì†Œë“œì™€ ê°™ì´ ì‹¤í–‰ ë˜ë©´ ì´ìƒí•´ì§€ë‹ˆ ì£¼ì˜
     public void RotateAroundPlayer()
     {
-        this.gameObject.transform.RotateAround(player.transform.position, Vector3.down, movementSpeed * Time.deltaTime); // ÇÃ·¹ÀÌ¾î¸¦ ±âÁØÀ¸·Î È¸ÀüÇÑ´Ù.
+        enemyTransform.RotateAround(player.position, Vector3.down, movementSpeed * Time.deltaTime); // í”Œë ˆì´ì–´ë¥¼ ê¸°ì¤€ìœ¼ë¡œ íšŒì „í•œë‹¤.
     }
 
-    // ±âÁØ È¸Àü ¸Ş¼Òµå
-    public void RotateAroundPosition(Vector3 target)
-    {
-        this.gameObject.transform.RotateAround(target, Vector3.up, movementSpeed * Time.deltaTime);
-    }
-
-    // °î¼± ÀÌµ¿, º¯°æ ¿¹Á¤, Å×½ºÆ® Áß
+    // ê³¡ì„  ì´ë™, ë³€ê²½ ì˜ˆì •, í…ŒìŠ¤íŠ¸ ì¤‘
     void run(float t)
     {
-        Vector3 mep = this.gameObject.transform.position; // ÇØ´ç ¿ÀºêÁ§Æ® ÇöÀç ÁÂÇ¥ °¡Á®¿À±â
-
-        Vector3 startHeightPos = mep + new Vector3(0, 1, 0) * height;
+        if (!confirmDoneFlag)
+        {
+            startPoint = enemyTransform.position; // í•´ë‹¹ ì˜¤ë¸Œì íŠ¸ í˜„ì¬ ì¢Œí‘œ ê°€ì ¸ì˜¤ê¸°
+            confirmDoneFlag = true;
+        }
+        Vector3 startHeightPos = startPoint + new Vector3(0, 1, 0) * height;
         Vector3 endHeightPos = position + new Vector3(0, 1, 0) * height;
 
-        Vector3 a = Vector3.Lerp(mep, startHeightPos, t); //Mathf.SmoothStep(tMin, tMax, t)°ªÀÌ ÀÚ¿¬½º·´°Ô Áõ°¡ÇÏ´Â°Çµ¥ »ı°¢º¸´Ù º°·Î´Ù.
+        Vector3 a = Vector3.Lerp(startPoint, startHeightPos, t);
         Vector3 b = Vector3.Lerp(startHeightPos, endHeightPos, t);
         Vector3 c = Vector3.Lerp(endHeightPos, position, t);
 
@@ -120,202 +138,230 @@ public class EnemyMove : MonoBehaviour
         transform.position = f;
     }
 
-    // ÀÚµ¿ ÁÂÇ¥ º¯°æ ¸Ş¼Òµå
-    // ±â±«ÇÑ ¿òÁ÷ÀÓ
+    // ì§€ì† ì¢Œí‘œ ë³€ê²½ ë©”ì†Œë“œ
+    // ê¸°ê´´í•œ ì›€ì§ì„
     void AutoMove()
     {
-        Vector3 mep = this.gameObject.transform.position; // ÇØ´ç ¿ÀºêÁ§Æ® ÇöÀç ÁÂÇ¥ °¡Á®¿À±â
+        Vector3 mep = enemyTransform.position; // í•´ë‹¹ ì˜¤ë¸Œì íŠ¸ í˜„ì¬ ì¢Œí‘œ ê°€ì ¸ì˜¤ê¸°
         float x = 0;
         float y = 0;
         float z = 0;
 
-        if (position == this.gameObject.transform.position) // ¸ñÇ¥ ÁÂÇ¥¿Í ÇöÀç ÁÂÇ¥°¡ °°À» ¶§ ½ÇÇà
+        if (position == enemyTransform.position) // ëª©í‘œ ì¢Œí‘œì™€ í˜„ì¬ ì¢Œí‘œê°€ ê°™ì„ ë•Œ ì‹¤í–‰
         {
             x = Random.Range(-20, 20);
             y = Random.Range(-15, 15);
             z = player.transform.position.z - Random.Range(-10, 0);
 
-            ChangeVector3(x, y, z);
+            ChangeTarget(x, y, z);
         }
 
-        if (mep.z <= player.transform.position.z + 10) // ÇÃ·¹ÀÌ¾î¿Í 10¸¸Å­ °¡±î¿ö Áö¸é ½ÇÇà
+        if (mep.z <= player.position.z + 10) // í”Œë ˆì´ì–´ì™€ 10ë§Œí¼ ê°€ê¹Œì›Œ ì§€ë©´ ì‹¤í–‰
         {
             z = Random.Range(30, 70);
-            ChangeVector3(position.x, position.y, z);
+            ChangeTarget(position.x, position.y, z);
         }
     }
 
-    // ÇÃ·¹ÀÌ¾î ¿ŞÂÊÀ¸·Î Áö³ª°¡±â
-    void p1_1()
+    // ì„ í˜•ì´ë™
+    void LinearMovement(bool directionFlag)
     {
-        ChangeVector3ToPlayer(-20, -5, -10);
+        if (directionFlag)
+        {
+            ChangeTarget(-50 + player.position.x, -5 + position.y, 5 + position.z); // í”Œë ˆì´ì–´ ì‹œì  ì•ì—ì„œ ì™¼ìª½ìœ¼ë¡œ ì´ë™í•˜ê¸°, í”Œë ˆì´ì–´ ì‹œì•¼ ë°–ìœ¼ë¡œ
+        }
+        else
+        {
+            ChangeTarget(50 + player.position.x, -5 + position.y, 5 + position.z); // í”Œë ˆì´ì–´ ì‹œì  ì•ì—ì„œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™í•˜ê¸°, í”Œë ˆì´ì–´ ì‹œì•¼ ë°–ìœ¼ë¡œ
+        }
     }
 
-    // ÇÃ·¹ÀÌ¾î ¿À¸¥ÂÊÀ¸·Î Áö³ª°¡±â
-    void p1_2()
+    // ì§€ê·¸ì œê·¸
+    void StepMovement()
     {
-        ChangeVector3ToPlayer(20, -5, -10);
-    }
+        Vector3 mep = enemyTransform.position; // í•´ë‹¹ ì˜¤ë¸Œì íŠ¸ í˜„ì¬ ì¢Œí‘œ ê°€ì ¸ì˜¤ê¸°
 
-    // ÇÃ·¹ÀÌ¾î ½ÃÁ¡ ¾Õ¿¡¼­ ¿ŞÂÊÀ¸·Î ÀÌµ¿ÇÏ±â, ÇÃ·¹ÀÌ¾î ½Ã¾ß ¹ÛÀ¸·Î
-    void p2_1()
-    {
-        ChangeVector3(-50 + player.transform.position.x, -5 + position.y, 5 + position.z);
-    }
+        bool change = false; // ëª©í‘œ ì¢Œí‘œê°’ ë³€ê²½ í™•ì¸ìš© 
 
-    // ÇÃ·¹ÀÌ¾î ½ÃÁ¡ ¾Õ¿¡¼­ ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿ÇÏ±â, ÇÃ·¹ÀÌ¾î ½Ã¾ß ¹ÛÀ¸·Î
-    void p2_2()
-    {
-        ChangeVector3(50 + player.transform.position.x, -5 + position.y, 5 + position.z);
-    }
-
-    // Áö±×Á¦±×
-    void p3()
-    {
-        Vector3 mep = this.gameObject.transform.position; // ÇØ´ç ¿ÀºêÁ§Æ® ÇöÀç ÁÂÇ¥ °¡Á®¿À±â
-
-        bool change = false; // ¸ñÇ¥ ÁÂÇ¥°ª º¯°æ È®ÀÎ¿ë 
-
-        float x = 0;
-        float y = 0;
+        float x;
         float z = 0;
 
-        if (count == 0) // ÇØ´ç ÆĞÅÏÀ» Ã³À½ ½ÇÇàÇÒ ¶§
+        if (mep == position)
         {
-            // ½ÃÀÛ ÁöÁ¡À¸·Î ÀÌµ¿
-            x = 30 + player.transform.position.x;
-            y = Random.Range(-10, 10);
-            z = 80;
-
-            target = new Vector3(x, y, z); // ´ÙÀ½ ÀÌµ¿
-
-            ChangeVector3(x, y, z);
-
-            count++;
-        }
-
-            if (mep.x == target.x && mep.z == 80) // ½ÃÀÛ ÁöÁ¡ÀÏ ¶§
+            if (mep.z >= 80)
             {
-                // ´ÙÀ½ ÁöÁ¡ ¼³Á¤
-                x = -30;
-                y = Random.Range(-20, 20);
+                z = 80;
+
+                if (mep.z == 80)
+                {
+                    z = 60;
+                }
+                change = true;
+            }
+            else if (mep.z >= 60)
+            {
                 z = 60;
 
-                change = true; // ÀÌµ¿À» À§ÇÑ true
-                target.x = x + player.transform.position.x;
+                if (mep.z == 60)
+                {
+                    z = 40;
+                }
+                change = true;
             }
-            else if (mep.x == target.x && mep.z == 60) // 1 ÁöÁ¡ÀÏ ¶§
+            else if (mep.z >= 40)
             {
-                // ´ÙÀ½ ÁöÁ¡ ¼³Á¤
-                x = 30;
-                y = Random.Range(-20, 20);
                 z = 40;
 
-                change = true; // ÀÌµ¿À» À§ÇÑ true
-                target.x = x + player.transform.position.x;
+                if (mep.z == 40)
+                {
+                    z = 20;
+                }
+                change = true;
             }
-            else if (mep.x == target.x && mep.z == 40) // 2 ÁöÁ¡ÀÏ ¶§
+            else if (mep.z >= 20)
             {
-                // ´ÙÀ½ ÁöÁ¡ ¼³Á¤
-                x = -30;
-                y = Random.Range(-20, 20);
                 z = 20;
 
-                change = true; // ÀÌµ¿À» À§ÇÑ true
-                target.x = x + player.transform.position.x;
+                if (mep.z == 20)
+                {
+                    z = 0;
+                }
+                change = true;
             }
-            else if (mep.x == target.x && mep.z == 20) // 3 ÁöÁ¡ÀÏ ¶§
-            {
-                // ´ÙÀ½ ÁöÁ¡ ¼³Á¤
-                x = 30;
-                y = Random.Range(-20, 20);
-                z = 0;
+        }
 
-                change = true; // ÀÌµ¿À» À§ÇÑ true
-                target.x = x + player.transform.position.x;
-            }
-
-            if (change) // À§ if ¹®¿¡¼­ °ªÀÌ º¯°æ ‰çÀ» ¶§
-            {
-                ChangeVector3ToPlayer(x, y, z - player.transform.position.z); // ÁöÁ¤ ÁÂÇ¥·Î ÀÌµ¿, ÇÃ·¹ÀÌ¾îÀÇ zÃà ÀÌµ¿ÀÌ º¸·ùµÊ¿¡ µû¸¥ - ¿¬»ê
-            }
-        
-    }
-
-    // ÇÃ·¹ÀÌ¾î¿¡°Ô ÀÌµ¿ÇÏ´Ù°¡ ÇÃ·¹ÀÌ¾î¿Í 20(z)¸¸Å­ °¡±î¿öÁö¸é ÇÃ·¹ÀÌ¾î ¿·À¸·Î Áö³ª°£´Ù. ¾ó¸¶³ª ºø°Ü°¥Áö´Â ÇöÀç ·£´ı
-    void p4()
-    {
-        ChangeVector3(player.transform.position.x, Random.Range(-5, 5), player.transform.position.z);
-
-        if (this.gameObject.transform.position.z <= player.transform.position.z + 20)
+        if (change) // ìœ„ if ë¬¸ì—ì„œ ê°’ì´ ë³€ê²½ Â‰ë  ë•Œ
         {
-            ChangeVector3ToPlayer(Random.Range(-10, 10), Random.Range(-10, 10), -10);
+            x = 30 * DistanceCalculation(mep.x);
+            ChangeTargetToPlayer(x, Random.Range(-20, 20), z - player.position.z); // ì§€ì • ì¢Œí‘œë¡œ ì´ë™
         }
     }
 
-    // ÇÃ·¹ÀÌ¾î ¾Õ¿¡¼­ ¼±È¸, »ç°¢ÇüÀ» ±×¸°´Ù.
-    void p5()
+    // í”Œë ˆì´ì–´ì—ê²Œ ì´ë™í•˜ë‹¤ê°€ í”Œë ˆì´ì–´ì™€ 20(z)ë§Œí¼ ê°€ê¹Œì›Œì§€ë©´ í”Œë ˆì´ì–´ ì˜†ìœ¼ë¡œ ì§€ë‚˜ê°„ë‹¤. ì–¼ë§ˆë‚˜ ë¹—ê²¨ê°ˆì§€ëŠ” í˜„ì¬ ëœë¤
+    void EvasionPlayer()
     {
-        Vector3 mep = this.gameObject.transform.position; // ÇØ´ç ¿ÀºêÁ§Æ® ÇöÀç ÁÂÇ¥ °¡Á®¿À±â
+        ChangeTarget(player.position.x, Random.Range(-5, 5), player.position.z);
 
-        float x = 0;
-        float y = 0;
+        if (enemyTransform.position.z <= player.position.z + 20)
+        {
+            ChangeTargetToPlayer(Random.Range(-10, 10), Random.Range(-10, 10), -10);
+        }
+    }
+
+    // í”Œë ˆì´ì–´ ì•ì—ì„œ ì„ íšŒ, ì‚¬ê°í˜•ì„ ê·¸ë¦°ë‹¤.
+    void SquareMovement()
+    {
+        Vector3 mep = enemyTransform.position; // í•´ë‹¹ ì˜¤ë¸Œì íŠ¸ í˜„ì¬ ì¢Œí‘œ ê°€ì ¸ì˜¤ê¸°
+
+        float x = 1;
         float z = 0;
 
-        bool change = false; // ¸ñÇ¥ ÁÂÇ¥°ª º¯°æ È®ÀÎ¿ë 
+        bool change = false; // ëª©í‘œ ì¢Œí‘œê°’ ë³€ê²½ í™•ì¸ìš© 
 
-        if (position == this.gameObject.transform.position) // ¸ñÇ¥ ÁÂÇ¥¿Í ÇöÀç ÁÂÇ¥°¡ °°À» ¶§ ½ÇÇà
+        if (mep == position)
         {
-            // ¿ÀºêÁ§Æ®°¡ ÇÃ·¹ÀÌ¾î ±âÁØ ¿ŞÂÊ¿¡ ÀÖ°í, ÇÃ·¹ÀÌ¾î ±âÁØ z °ªÀÌ 45 º¸´Ù ³ôÀ» ¶§
-            if (mep.x < player.transform.position.x && mep.z > player.transform.position.z + 45)
+            // ì˜¤ë¸Œì íŠ¸ê°€ í”Œë ˆì´ì–´ ê¸°ì¤€ ì™¼ìª½ì— ìˆê³ , í”Œë ˆì´ì–´ ê¸°ì¤€ z ê°’ì´ 45 ë³´ë‹¤ ë†’ì„ ë•Œ
+            if (mep.x <= player.position.x && mep.z >= player.position.z + 45)
             {
-                // ´ÙÀ½ ÁöÁ¡ ¼³Á¤
-                x = 30;
-                y = Random.Range(-10, 10);
+                // ë‹¤ìŒ ì§€ì  ì„¤ì •
+                x = 1;
                 z = 80;
-
-                change = true; // ÀÌµ¿À» À§ÇÑ true
             }
-            // ¿ÀºêÁ§Æ®°¡ ÇÃ·¹ÀÌ¾î ±âÁØ ¿À¸¥ÂÊ¿¡ ÀÖ°í, ÇÃ·¹ÀÌ¾î ±âÁØ z °ªÀÌ 45 º¸´Ù ³ôÀ» ¶§
-            else if (mep.x > player.transform.position.x && mep.z > player.transform.position.z + 45)
+            // ì˜¤ë¸Œì íŠ¸ê°€ í”Œë ˆì´ì–´ ê¸°ì¤€ ì˜¤ë¥¸ìª½ì— ìˆê³ , í”Œë ˆì´ì–´ ê¸°ì¤€ z ê°’ì´ 45 ë³´ë‹¤ ë†’ì„ ë•Œ
+            else if (mep.x >= player.position.x && mep.z >= player.position.z + 45)
             {
-                // ´ÙÀ½ ÁöÁ¡ ¼³Á¤
-                x = 30;
-                y = Random.Range(-10, 10);
+                // ë‹¤ìŒ ì§€ì  ì„¤ì •
+                x = -1;
                 z = 40;
-
-                change = true; // ÀÌµ¿À» À§ÇÑ true
             }
-            // ¿ÀºêÁ§Æ®°¡ ÇÃ·¹ÀÌ¾î ±âÁØ ¿À¸¥ÂÊ¿¡ ÀÖ°í, ÇÃ·¹ÀÌ¾î ±âÁØ z °ªÀÌ 45 º¸´Ù ³·À» ¶§
-            else if (mep.x > player.transform.position.x && mep.z < player.transform.position.z + 45)
+            // ì˜¤ë¸Œì íŠ¸ê°€ í”Œë ˆì´ì–´ ê¸°ì¤€ ì˜¤ë¥¸ìª½ì— ìˆê³ , í”Œë ˆì´ì–´ ê¸°ì¤€ z ê°’ì´ 45 ë³´ë‹¤ ë‚®ì„ ë•Œ
+            else if (mep.x >= player.position.x && mep.z <= player.position.z + 45)
             {
-                // ´ÙÀ½ ÁöÁ¡ ¼³Á¤
-                x = -30;
-                y = Random.Range(-10, 10);
+                // ë‹¤ìŒ ì§€ì  ì„¤ì •
+                x = 1;
                 z = 40;
-
-                change = true; // ÀÌµ¿À» À§ÇÑ true
             }
-            // ¿ÀºêÁ§Æ®°¡ ÇÃ·¹ÀÌ¾î ±âÁØ ¿ŞÂÊ¿¡ ÀÖ°í, ÇÃ·¹ÀÌ¾î ±âÁØ z °ªÀÌ 45 º¸´Ù ³·À» ¶§
-            else if (mep.x < player.transform.position.x && mep.z < player.transform.position.z + 45)
+            // ì˜¤ë¸Œì íŠ¸ê°€ í”Œë ˆì´ì–´ ê¸°ì¤€ ì™¼ìª½ì— ìˆê³ , í”Œë ˆì´ì–´ ê¸°ì¤€ z ê°’ì´ 45 ë³´ë‹¤ ë‚®ì„ ë•Œ
+            else if (mep.x <= player.position.x && mep.z <= player.position.z + 45)
             {
-                // ´ÙÀ½ ÁöÁ¡ ¼³Á¤
-                x = -30;
-                y = Random.Range(-10, 10);
+                // ë‹¤ìŒ ì§€ì  ì„¤ì •
+                x = -1;
                 z = 80;
-
-                change = true; // ÀÌµ¿À» À§ÇÑ true
             }
 
-            if (change) // À§ if ¹®¿¡¼­ °ªÀÌ º¯°æ ‰çÀ» ¶§, Áï ¸ñÇ¥ ÁÂÇ¥°¡ º¯°æ‰çÀ» ¶§
-            {
-                ChangeVector3ToPlayer(x, y, z - player.transform.position.z); // ÁöÁ¤ ÁÂÇ¥·Î ÀÌµ¿, ÇÃ·¹ÀÌ¾îÀÇ zÃà ÀÌµ¿ÀÌ º¸·ùµÊ¿¡ µû¸¥ - ¿¬»ê
-            }
+            change = true; // ì´ë™ì„ ìœ„í•œ true
+        }
+
+        if (change) // ìœ„ if ë¬¸ì—ì„œ ê°’ì´ ë³€ê²½ Â‰ë  ë•Œ, ì¦‰ ëª©í‘œ ì¢Œí‘œê°€ ë³€ê²½Â‰ë  ë•Œ
+        {
+            x *= 30 * DistanceCalculation(mep.x);
+            ChangeTargetToPlayer(x, Random.Range(-20, 20), z - player.position.z); // ì§€ì • ì¢Œí‘œë¡œ ì´ë™, í”Œë ˆì´ì–´ì˜ zì¶• ì´ë™ì´ ë³´ë¥˜ë¨ì— ë”°ë¥¸ - ì—°ì‚°
         }
     }
 
-    void p6()
+    // ì™•ë³µ ì´ë™
+    void RoundTrip()
     {
+        if (enemyTransform.position == position) // í˜„ì¬ ì¢Œí‘œê°€ ëª©í‘œ ì¢Œí‘œì™€ ê°™ë‹¤ë©´ ì‹¤í–‰
+        {
+            ChangeTargetToPlayer(0, 0, 0); // í”Œë ˆì´ì–´ ì¢Œí‘œë¡œ ì´ë™
+        }
 
+        if (enemyTransform.position.z < player.position.z + 15) // í”Œë ˆì´ì–´ì™€ 15ë§Œí¼ ê°€ê¹Œì›Œì§€ë©´
+        {
+            ChangeTargetToPlayer(Random.Range(-30,30), Random.Range(-20, 20), Random.Range(60, 100)); // -30~30, -20~20, 60~100ì˜ ì¢Œí‘œë¡œ ì´ë™í•œë‹¤.
+        }
     }
+
+    // 
+    private int DistanceCalculation(float number)
+    {
+        if(number >= 0)
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+    IEnumerator Repeater(string name)
+    {
+        SetBullet(ObjectManager.instance.GetBullet(name), name); // íƒ„í™˜ ë°œì‚¬
+        yield return new WaitForSeconds(repeaterInterval); // ì—°ì‚¬ì‹œê°„ë§Œí¼ ëŒ€ê¸°
+    }
+
+    // íƒ„í™˜ ì˜¤ë¸Œì íŠ¸ ìœ„ì¹˜ ì§€ì •, íšŒì „ê°ë„ ì„¤ì •, ì˜¤ë¸Œì íŠ¸ í™œì„±í™”, ì‹¤ì œ ë°œì‚¬ ë¡œì§ ì‘ë™
+    private void SetBullet(GameObject bullet, string name)
+    {
+        if (bullet == null) return; // ë°›ì•„ì˜¬ íƒ„í™˜ì´ ì—†ì„ ê²½ìš° ë°˜í™˜
+
+        Vector3 bulletPosition = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 1.5f));
+
+        shotPoint[0] = player.position; // ëª©í‘œì§€ì , í”Œë ˆì´ì–´
+        shotPoint[1] = bulletPosition; // ì‹œì‘ì§€ì , ì 
+
+        bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 1.5f)); // ìœ„ì¹˜ ì§€ì •
+        bullet.transform.rotation = this.transform.rotation; // íšŒì „ê° ì§€ì •
+        bullet.SetActive(true); // í™œì„±í™”
+
+        if (name == "DirectBullet")
+        {
+            bullet.GetComponent<BulletManager>().StartCoroutine("Shot", shotPoint); // íƒ„í™˜ ë™ì‘ ë¡œì§ ì½”ë£¨í‹´ ì‹œì‘
+        }
+        else if (name == "HowitzerBullet")
+        {
+            bullet.GetComponent<BulletManager>().StartCoroutine("Shot", shotPoint); // íƒ„í™˜ ë™ì‘ ë¡œì§ ì½”ë£¨í‹´ ì‹œì‘
+        }
+        else if (name == "Buckshot")
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                bullet.transform.GetChild(i).transform.position = bullet.transform.position;  //ìì‹ ì˜¤ë¸Œì íŠ¸ ë¶€ëª¨ì™€ ë™ì¼í•œ ìœ„ì¹˜ë¡œ ì´ë™
+            }
+            bullet.GetComponent<BulletManager>().StartCoroutine("Shot", shotPoint); // íƒ„í™˜ ë™ì‘ ë¡œì§ ì½”ë£¨í‹´ ì‹œì‘
+        }
+    }
+
 }
