@@ -6,14 +6,10 @@ public class BulletManager : MonoBehaviour
 {
     public float playerShotSpeed; // 플레이어 발사 속도
     public float satelliteShotSpeed; // 새틀라이트 발사 속도
-    public float spinnerBulletSpeed; // 회전탄 발사속도
-    public float spinnerBulletInterval = 0.1f; // 회전탄 발사 간격
 
     public float firingAngle = 45.0f;  //각도
     public float gravity = 9.8f;  //중력
     public float weight = 1.3f;   //가중치값
-
-    private float timeTemp;
 
     // 플레이어의 발사 발사 코루틴
     IEnumerator Shot(Vector3[] shotVecter)
@@ -67,36 +63,6 @@ public class BulletManager : MonoBehaviour
                 for (int i = 0; i < 5; i++)
                 {
                     this.transform.GetChild(i).gameObject.transform.Translate(directionVector * Time.deltaTime * playerShotSpeed); // 탄환 발사
-                }
-                yield return null; // 코루틴 딜레이 없음
-            }
-        }
-        else if (this.gameObject.name == "SpinnerBullet")
-        {
-            float timer = 0;
-            int spinnerBulletCount = 0;
-            while (true)
-            {
-                timer += Time.deltaTime;
-                if (timer < spinnerBulletInterval)
-                {
-                    this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * spinnerBulletSpeed);
-                }
-                else if (timer > 2) break;
-                else
-                {
-                    this.gameObject.transform.Rotate(Vector3.up * Time.deltaTime * 30f);
-                    if (timer > spinnerBulletInterval)
-                    {
-                        if (timer > spinnerBulletInterval * 1.5f && spinnerBulletCount < 9)
-                        {
-                            spinnerBulletCount++;
-                        }
-                        for (int i = 0; i < 4; i++)
-                        {
-                            this.gameObject.transform.GetChild(spinnerBulletCount).GetChild(i).Translate(Vector3.forward * Time.deltaTime * spinnerBulletSpeed);
-                        }
-                    }
                 }
                 yield return null; // 코루틴 딜레이 없음
             }

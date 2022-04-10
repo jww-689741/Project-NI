@@ -159,6 +159,7 @@ public class PlayerManager : MonoBehaviour
             bullet.GetComponent<BulletManager>().StartCoroutine("Shot", shotPoint); // 탄환 동작 로직 코루틴 시작
         }
         else if(name == "SpinnerBullet"){
+            // 자탄 위치 재설정
             for (int i = 0; i < 10; i++)
             {
                 for(int j = 0; j < 4; j++)
@@ -166,7 +167,7 @@ public class PlayerManager : MonoBehaviour
                     bullet.gameObject.transform.GetChild(i).GetChild(j).transform.position = bullet.transform.position;
                 }
             }
-            bullet.GetComponent<BulletManager>().StartCoroutine("Shot", shotPoint); // 탄환 동작 로직 코루틴 시작
+            bullet.GetComponent<SpinnerBullet>().StartCoroutine("Shot", false); // 탄환 동작 로직 코루틴 시작
         }
     }
 }
