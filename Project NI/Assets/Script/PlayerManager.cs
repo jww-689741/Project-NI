@@ -8,11 +8,15 @@ public class PlayerManager : MonoBehaviour
     public float movementSpeed; // 이동속도
 
     private bool repeaterLock; // 연사 여부
+    private bool clickLock = false;
+    private float clickTime;
+    private float time;
     private delegate void Control();
     Control control;
     private Rigidbody playerRigidbody;
     private Camera camera;
     private RaycastHit hit;
+    private Vector3 movementVector;
     private Vector3[] shotPoint;
 
     private void Start()
@@ -29,6 +33,7 @@ public class PlayerManager : MonoBehaviour
     private void Update()
     {
         control();
+        time += Time.deltaTime;
     }
 
     // 조준
@@ -37,7 +42,9 @@ public class PlayerManager : MonoBehaviour
         // 화면 상의 마우스 포인터 위치로 레이캐스팅
         if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit))
         {
-            shotPoint[0] = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+            if(CameraManager.cameraState == 0) shotPoint[0] = new Vector3(hit.point.x, hit.point.y, hit.point.z); // 백뷰 시점의서의 조준
+            else if (CameraManager.cameraState == 1) shotPoint[0] = new Vector3(hit.point.x, 0, hit.point.z); // 탑뷰 시점의서의 조준
+            else if (CameraManager.cameraState == 2) shotPoint[0] = new Vector3(0, hit.point.y, hit.point.z); // 사이드뷰 시점의서의 조준
         }
     }
 
@@ -45,45 +52,71 @@ public class PlayerManager : MonoBehaviour
     // 탄환 발사
     private void Shot()
     {
-
-        if (Input.GetMouseButtonDown(0)) // 마우스 좌클릭 유지중일 때
-        {
-            StartCoroutine("Repeater", "DirectBullet");
-        }
-        else if (Input.GetMouseButtonUp(0)) repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
-        if (Input.GetMouseButtonDown(1)) // 마우스 우클릭 유지중일 때
-        {
-            StartCoroutine("Repeater", "HowitzerBullet");
-        }
-        else if (Input.GetMouseButtonUp(1)) repeaterLock = false; // 마우스 우클릭에서 손을 뗄때
-
-        if (Input.GetMouseButtonDown(4)) // 마우스 추가버튼 유지중일때
-        {
-            StartCoroutine("Repeater", "Buckshot");
-        }
-        else if (Input.GetMouseButtonUp(4)) repeaterLock = false; // 마우스 추가버튼에서 손을 뗄때
+        StartCoroutine("Repeater");
     }
 
     // 플레이어 이동
     private void Movement()
     {
-        // 플레이어가 이동하는 방향과 속도를 삽입한 벡터 - 마우스 휠 컨트롤 삽입 필요
-        float movementX = Input.GetAxis("XMove");
-        float movementY = Input.GetAxis("YMove");
-        float movementZ = Input.GetAxis("ZMove");
-        Vector3 movementVector = new Vector3(movementX, movementY, movementZ) * movementSpeed;
+        // 플레이어가 이동하는 방향과 속도를 삽입한 벡터
+        float movementX = Input.GetAxis("XMove"); // A, D
+        float movementY = Input.GetAxis("YMove"); // W, S
+        if(CameraManager.cameraState == 0) movementVector = new Vector3(movementX, movementY, 0) * movementSpeed; // 백뷰 시점에서의 이동
+        else if (CameraManager.cameraState == 1) movementVector = new Vector3(movementX, 0, movementY) * movementSpeed; // 탑뷰 시점에서의 이동
+        else if (CameraManager.cameraState == 2) movementVector = new Vector3(0, movementY, movementX) * movementSpeed; // 사이드뷰 시점에서의 이동
         playerRigidbody.velocity = movementVector;
     }
 
-    // 탄환 연사 코루틴
-    IEnumerator Repeater(string name)
+    // 탄환 발사 코루틴
+    IEnumerator Repeater()
     {
-        repeaterLock = true; // 연사 활성화
-        while (repeaterLock)
+        if (Time.time - clickTime > repeaterInterval) clickLock = false;
+        if (Input.GetMouseButtonDown(0) && !clickLock) // 마우스 좌클릭 유지중일 때
         {
-            SetBullet(ObjectManager.instance.GetBullet(name), name); // 탄환 발사
-            yield return new WaitForSeconds(repeaterInterval); // 연사시간만큼 대기
+            clickTime = Time.time;
+            repeaterLock = true; // 연사 활성화
+            while (repeaterLock)
+            {
+                SetBullet(ObjectManager.instance.GetBullet("DirectBullet"), "DirectBullet"); // 탄환 발사
+                yield return new WaitForSeconds(repeaterInterval); // 연사시간만큼 대기
+            }
         }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            if(Time.time - clickTime < repeaterInterval) clickLock = true;
+            repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
+        }
+        if (Input.GetMouseButtonDown(1) && !clickLock) // 마우스 좌클릭 유지중일 때
+        {
+            clickTime = Time.time;
+            repeaterLock = true; // 연사 활성화
+            while (repeaterLock)
+            {
+                SetBullet(ObjectManager.instance.GetBullet("HowitzerBullet"), "HowitzerBullet"); // 탄환 발사
+                yield return new WaitForSeconds(repeaterInterval); // 연사시간만큼 대기
+            }
+        }
+        else if (Input.GetMouseButtonUp(1)) // 마우스 좌클릭에서 손을 뗄때
+        {
+            if (Time.time - clickTime < repeaterInterval) clickLock = true;
+            repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
+        }
+        if (Input.GetMouseButtonDown(4) && !clickLock) // 마우스 좌클릭 유지중일 때
+        {
+            clickTime = Time.time;
+            repeaterLock = true; // 연사 활성화
+            while (repeaterLock)
+            {
+                SetBullet(ObjectManager.instance.GetBullet("Buckshot"), "Buckshot"); // 탄환 발사
+                yield return new WaitForSeconds(repeaterInterval); // 연사시간만큼 대기
+            }
+        }
+        else if (Input.GetMouseButtonUp(4)) // 마우스 좌클릭에서 손을 뗄때
+        {
+            if (Time.time - clickTime < repeaterInterval) clickLock = true;
+            repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
+        }
+
     }
 
     // 탄환 오브젝트 위치 지정, 회전각도 설정, 오브젝트 활성화, 실제 발사 로직 작동

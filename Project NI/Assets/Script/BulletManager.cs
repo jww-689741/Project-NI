@@ -17,7 +17,6 @@ public class BulletManager : MonoBehaviour
         if(this.gameObject.name == "DirectBullet")
         {
             Vector3 directionVector = ((shotVecter[0] - shotVecter[1]).normalized); // (¸¶¿ì½º ÁÂÇ¥ - ¹ß»ç ½ÃÀÛÁöÁ¡ ÁÂÇ¥).¹æÇâº¤ÅÍ
-            Debug.Log(directionVector);
             float timer = 0;
             while (true)
             {
@@ -57,7 +56,6 @@ public class BulletManager : MonoBehaviour
         else if (this.gameObject.name == "Buckshot")
         {
             Vector3 directionVector = ((shotVecter[0] - shotVecter[1]).normalized); // (¸¶¿ì½º ÁÂÇ¥ - ¹ß»ç ½ÃÀÛÁöÁ¡ ÁÂÇ¥).¹æÇâº¤ÅÍ
-            Debug.Log(directionVector);
             float timer = 0;
             while (true)
             {

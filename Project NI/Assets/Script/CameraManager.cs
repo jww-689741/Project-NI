@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
+    public static int cameraState; // 카메라 시점 상태 플래그 ( 0 : 백뷰, 1 : 탑뷰, 2 : 사이드뷰 )
+
     public Transform player; // 추적할 플레이어 오브젝트의 위치
     public float trackingSpeed; // 카메라 추적 속도
 
@@ -11,7 +13,6 @@ public class CameraManager : MonoBehaviour
     private float timer;
 
     private float runningTime; // 진행시간
-    private int cameraState; // 카메라 시점 상태 플래그 ( 0 : 백뷰, 1 : 탑뷰, 2 : 사이드뷰 )
 
     private void Awake()
     {
