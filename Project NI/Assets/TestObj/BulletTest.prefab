@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6719726858498533628}
   - component: {fileID: 2959147501714791575}
   - component: {fileID: 2617003141615467739}
+  - component: {fileID: 1265037499533427101}
   m_Layer: 0
   m_Name: BulletTest
   m_TagString: Untagged
@@ -190,7 +191,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerShotSpeed: 50
   satelliteShotSpeed: 50
-  spinnerBulletSpeed: 10
   firingAngle: 45
   gravity: 9.8
   weight: 1.3
+--- !u!114 &1265037499533427101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6340139282222604332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dd7e577d6746ec43a66234a85b9304f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statusData: {fileID: 11400000, guid: 84ce576a1854762458de0038def5c0d9, type: 2}
