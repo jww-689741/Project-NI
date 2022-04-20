@@ -23,10 +23,11 @@ public class DirectBullet : MonoBehaviour, IBulletShot
             timer += Time.deltaTime;
             if (timer > status.GetHoldingTime()) break;
 
-            transform.Translate(directionVector * Time.deltaTime * status.GetShotSpeed()); // 탄환 발사
+            transform.Translate(Vector3.forward * Time.deltaTime * status.GetShotSpeed()); // 탄환 발사
             yield return null; // 코루틴 딜레이 없음
         }
 
         this.gameObject.SetActive(false); // 비활성화
     }
+
 }

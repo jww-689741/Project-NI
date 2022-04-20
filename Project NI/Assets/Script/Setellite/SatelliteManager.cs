@@ -6,12 +6,13 @@ public class SatelliteManager : MonoBehaviour
 {
     public GameObject prefab;
     public float repeaterInterval; // 연사속도
+    public bool satelliteLock; // 활성화 여부
     private float timer = 0f;
 
     private void Update()
     {
         timer += Time.deltaTime;
-        if(timer > repeaterInterval)
+        if(timer > repeaterInterval && !satelliteLock)
         {
             timer = 0;
             SetBullet(ObjectManager.instance.GetBullet("DirectBullet")); // 탄환 발사

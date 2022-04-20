@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class SpinnerChild : MonoBehaviour
 {
-    public float speed = 50; // 자탄 발사 속도
-
     private void Update()
     {
-        for (int i = 0; i < 4; i++)
+        var status = GetComponentInParent<SpinnerBulletStausManager>(); // 부모의 스탯 컴포넌트를 가져옴
+        var HoldingTime = 4; // 자탄의 발사방향
+        for (int i = 0; i < HoldingTime; i++)
         {
-            this.gameObject.transform.GetChild(i).Translate(Vector3.forward * Time.deltaTime * speed); // 자탄 발사
+            this.gameObject.transform.GetChild(i).Translate(Vector3.forward * Time.deltaTime * status.GetShotSpeed()); // 자탄 발사
         }
     }
 }

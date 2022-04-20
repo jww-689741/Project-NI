@@ -2,42 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpinnerBullet : MonoBehaviour
+public class SpinnerBullet : MonoBehaviour, IBulletShot
 {
-    public float centerBulletSpeed; // 중앙탄 발사속도
-    public float spinnerBulletInterval = 0.5f; // 회전탄 발사 간격
-
-    IEnumerator Shot(bool direction)
+    public IEnumerator Shot(Vector3 directionVector)
     {
-        float timer = 0; // 전체 탄 지속시간용
-        float timeTemp = 0; // 자탄 발사 간격용
-        int spinnerBulletCount = 0; // 자탄 발사 순서
-        for (int i = 0; i < 10; i++) // 자탄 초기 비활성화
+        var status = GetComponent<SpinnerBulletStausManager>();
+        var timer = 0f; // 전체 탄 지속시간용
+        var timeTemp = 0f; // 자탄 발사 간격용
+        var count = 0; // 자탄 수 카운트
+        var bulletTransform = this.gameObject.transform; // 자기 자신의 Transform
+        for (int i = 0; i < status.GetChildBulletNumber(); i++) // 자탄 초기 비활성화
         {
-            this.gameObject.transform.GetChild(i).gameObject.SetActive(false);
+            bulletTransform.GetChild(i).gameObject.SetActive(false);
         }
         while (true)
         {
             timer += Time.deltaTime;
-            if (timer < 0.5f) // 0.5초동안 중앙 탄 전방 발사
+            if (timer < status.GetAttackSpeed()) // 0.5초동안 중앙 탄 전방 발사
             {
-                this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * centerBulletSpeed);
+                bulletTransform.Translate(directionVector * Time.deltaTime * status.GetShotSpeed());
             }
-            else if (timer > 5) break; // 전체 시간이 5초가 넘어가면 루프 아웃
+            else if (timer > status.GetHoldingTime()) break; // 유지시간을 넘어가면 루프 아웃
             else
             {
-                if(direction) this.gameObject.transform.Rotate(Vector3.up * Time.deltaTime * 30f); // 방향이 ture값일 때 시계 반대방향 회전
-                else this.gameObject.transform.Rotate(Vector3.up * Time.deltaTime * -30f); // 방향이 false값일 때 시계방향 회전
+                if (status.GetRotateDirection()) bulletTransform.Rotate(Vector3.up * Time.deltaTime * -status.GetRotateAngle()); // 시계 방향 회전
+                else bulletTransform.Rotate(Vector3.up * Time.deltaTime * status.GetRotateAngle()); // 시계 반대 방향 회전
                 timeTemp += Time.deltaTime;
-                if (timeTemp > spinnerBulletInterval) // 자탄 활성화
+                if (timeTemp > status.GetAttackSpeed()) // 자탄 활성화
                 {
                     timeTemp = 0;
-                    this.gameObject.transform.GetChild(spinnerBulletCount).gameObject.SetActive(true);
-                    if (spinnerBulletCount < 9) spinnerBulletCount++;
+                    bulletTransform.GetChild(count).gameObject.SetActive(true);
+                    if (count < status.GetChildBulletNumber()) ++count;
                 }
             }
             yield return null; // 코루틴 딜레이 없음
         }
         this.gameObject.SetActive(false); // 비활성화
+    }
+
+    public float GetAttackSpeedToBullet()
+    {
+        var status = GetComponent<SpinnerBulletStausManager>();
+        return status.GetAttackSpeed();
     }
 }

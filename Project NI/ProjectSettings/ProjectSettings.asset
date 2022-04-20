@@ -47,7 +47,7 @@ PlayerSettings:
   defaultScreenWidthWeb: 960
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
-  m_ActiveColorSpace: 0
+  m_ActiveColorSpace: 1
   m_MTRendering: 1
   mipStripping: 0
   numberOfMipsStripped: 0
@@ -342,7 +342,15 @@ PlayerSettings:
     Android: 1
     iPhone: 1
     tvOS: 1
-  m_BuildTargetGroupLightmapEncodingQuality: []
+  m_BuildTargetGroupLightmapEncodingQuality:
+  - m_BuildTarget: Standalone
+    m_EncodingQuality: 2
+  - m_BuildTarget: Android
+    m_EncodingQuality: 2
+  - m_BuildTarget: Lumin
+    m_EncodingQuality: 2
+  - m_BuildTarget: Windows Store Apps
+    m_EncodingQuality: 2
   m_BuildTargetGroupLightmapSettings: []
   m_BuildTargetNormalMapEncoding: []
   playModeTestRunnerEnabled: 0
@@ -591,7 +599,20 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: CREST_OCEAN;ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    7: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    13: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    14: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    19: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    21: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    25: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    27: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    28: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    29: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    30: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    32: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
+    33: ENVIRO_LW;ENVIRO_HD;ENVIRO_HDRP
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
