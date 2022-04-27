@@ -41,7 +41,7 @@ WindZone:
   m_Enabled: 1
   m_Mode: 0
   m_Radius: 20
-  m_WindMain: 0.144
+  m_WindMain: 0.24004571
   m_WindTurbulence: 0.2
   m_WindPulseMagnitude: 0.2
   m_WindPulseFrequency: 0.01
@@ -84,7 +84,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1061156867227144}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 30
   simulationSpeed: 1
   stopAction: 0
@@ -2044,6 +2044,62 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+  LifetimeByEmitterSpeedModule:
+    enabled: 0
+    m_Curve:
+      serializedVersion: 2
+      minMaxState: 1
+      scalar: 1
+      minScalar: 1
+      maxCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: -0.8
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0.2
+          inSlope: -0.8
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      minCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    m_Range: {x: 0, y: 1}
   ForceModule:
     enabled: 0
     x:
@@ -3420,19 +3476,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -3606,17 +3663,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -4571,6 +4631,7 @@ ParticleSystemRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4613,6 +4674,8 @@ ParticleSystemRenderer:
   m_EnableGPUInstancing: 0
   m_ApplyActiveColorSpace: 0
   m_AllowRoll: 1
+  m_FreeformStretching: 0
+  m_RotateWithStretchDirection: 1
   m_VertexStreams: 0001030405
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   m_Mesh1: {fileID: 0}
@@ -4630,6 +4693,7 @@ GameObject:
   - component: {fileID: 4633244280953788}
   - component: {fileID: 108498140282408920}
   - component: {fileID: 114692922624729770}
+  - component: {fileID: 8597006577752982351}
   m_Layer: 0
   m_Name: Lightning
   m_TagString: Untagged
@@ -4663,7 +4727,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 100000
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -4703,13 +4767,14 @@ Light:
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
+  m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
+  m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!114 &114692922624729770
@@ -4724,6 +4789,128 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120ff24da31c9654cb86380646d96e5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8597006577752982351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384870769076926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 11
+  m_ObsoleteShadowResolutionTier: 1
+  m_ObsoleteUseShadowQualitySettings: 0
+  m_ObsoleteCustomShadowResolution: 512
+  m_ObsoleteContactShadows: 0
+  m_PointlightHDType: 0
+  m_SpotLightShape: 0
+  m_AreaLightShape: 0
+  m_Intensity: 100000
+  m_EnableSpotReflector: 1
+  m_LuxAtDistance: 1
+  m_InnerSpotPercent: 0
+  m_SpotIESCutoffPercent: 100
+  m_LightDimmer: 1
+  m_VolumetricDimmer: 1
+  m_LightUnit: 2
+  m_FadeDistance: 10000
+  m_VolumetricFadeDistance: 10000
+  m_AffectDiffuse: 1
+  m_AffectSpecular: 1
+  m_NonLightmappedOnly: 0
+  m_ShapeWidth: 0.5
+  m_ShapeHeight: 0.5
+  m_AspectRatio: 1
+  m_ShapeRadius: 0.025
+  m_SoftnessScale: 1
+  m_UseCustomSpotLightShadowCone: 0
+  m_CustomSpotLightShadowCone: 30
+  m_MaxSmoothness: 0.99
+  m_ApplyRangeAttenuation: 1
+  m_DisplayAreaLightEmissiveMesh: 0
+  m_AreaLightCookie: {fileID: 0}
+  m_IESPoint: {fileID: 0}
+  m_IESSpot: {fileID: 0}
+  m_IncludeForRayTracing: 1
+  m_AreaLightShadowCone: 120
+  m_UseScreenSpaceShadows: 0
+  m_InteractsWithSky: 1
+  m_AngularDiameter: 0.5
+  m_FlareSize: 2
+  m_FlareTint: {r: 1, g: 1, b: 1, a: 1}
+  m_FlareFalloff: 4
+  m_SurfaceTexture: {fileID: 0}
+  m_SurfaceTint: {r: 1, g: 1, b: 1, a: 1}
+  m_Distance: 1.5e+11
+  m_UseRayTracedShadows: 0
+  m_NumRayTracingSamples: 4
+  m_FilterTracedShadow: 1
+  m_FilterSizeTraced: 16
+  m_SunLightConeAngle: 0.5
+  m_LightShadowRadius: 0.5
+  m_SemiTransparentShadow: 0
+  m_ColorShadow: 1
+  m_DistanceBasedFiltering: 0
+  m_EvsmExponent: 15
+  m_EvsmLightLeakBias: 0
+  m_EvsmVarianceBias: 0.00001
+  m_EvsmBlurPasses: 0
+  m_LightlayersMask: 1
+  m_LinkShadowLayers: 1
+  m_ShadowNearPlane: 0.1
+  m_BlockerSampleCount: 24
+  m_FilterSampleCount: 16
+  m_MinFilterSize: 0.1
+  m_KernelSize: 5
+  m_LightAngle: 1
+  m_MaxDepthBias: 0.001
+  m_ShadowResolution:
+    m_Override: 512
+    m_UseOverride: 1
+    m_Level: 0
+  m_ShadowDimmer: 1
+  m_VolumetricShadowDimmer: 1
+  m_ShadowFadeDistance: 10000
+  m_UseContactShadow:
+    m_Override: 0
+    m_UseOverride: 1
+    m_Level: 0
+  m_RayTracedContactShadow: 0
+  m_ShadowTint: {r: 0, g: 0, b: 0, a: 1}
+  m_PenumbraTint: 0
+  m_NormalBias: 0.75
+  m_SlopeBias: 0.5
+  m_ShadowUpdateMode: 0
+  m_AlwaysDrawDynamicShadows: 0
+  m_UpdateShadowOnLightMovement: 0
+  m_CachedShadowTranslationThreshold: 0.01
+  m_CachedShadowAngularThreshold: 0.5
+  m_BarnDoorAngle: 90
+  m_BarnDoorLength: 0.05
+  m_preserveCachedShadow: 0
+  m_ShadowCascadeRatios:
+  - 0.05
+  - 0.2
+  - 0.3
+  m_ShadowCascadeBorders:
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  m_ShadowAlgorithm: 0
+  m_ShadowVariant: 0
+  m_ShadowPrecision: 0
+  useOldInspector: 0
+  useVolumetric: 1
+  featuresFoldout: 1
+  showAdditionalSettings: 0
+  m_AreaLightEmissiveMeshShadowCastingMode: 0
+  m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
+  m_AreaLightEmissiveMeshLayer: -1
 --- !u!1 &1466661228802466
 GameObject:
   m_ObjectHideFlags: 0
@@ -4747,7 +4934,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1466661228802466}
-  m_LocalRotation: {x: 0.4402994, y: -0.553296, z: -0.553296, w: 0.4402994}
+  m_LocalRotation: {x: 0.44163337, y: -0.55223185, z: -0.55223185, w: 0.44163337}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -4793,7 +4980,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1673971077676272}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 60
   simulationSpeed: 1
   stopAction: 0
@@ -6753,6 +6940,62 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+  LifetimeByEmitterSpeedModule:
+    enabled: 0
+    m_Curve:
+      serializedVersion: 2
+      minMaxState: 1
+      scalar: 1
+      minScalar: 1
+      maxCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: -0.8
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0.2
+          inSlope: -0.8
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      minCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    m_Range: {x: 0, y: 1}
   ForceModule:
     enabled: 0
     x:
@@ -8129,19 +8372,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -8315,17 +8559,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -9280,6 +9527,7 @@ ParticleSystemRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9322,6 +9570,8 @@ ParticleSystemRenderer:
   m_EnableGPUInstancing: 0
   m_ApplyActiveColorSpace: 0
   m_AllowRoll: 1
+  m_FreeformStretching: 0
+  m_RotateWithStretchDirection: 1
   m_VertexStreams: 0001030405
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   m_Mesh1: {fileID: 0}
@@ -9367,7 +9617,7 @@ ReflectionProbe:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699184910479678}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Type: 0
   m_Mode: 1
@@ -9400,7 +9650,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699184910479678}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c770e3da8f0f0c47bc89239c9aa26bf, type: 3}
   m_Name: 
@@ -9412,7 +9662,7 @@ MonoBehaviour:
   renderCam: {fileID: 0}
   useEnviroEffects: 1
   rendering: 0
-  myProbe: {fileID: 0}
+  myProbe: {fileID: 215602099512764226}
   customRendering: 0
   customCloudsQuality: {fileID: 0}
   useFog: 0
@@ -9440,8 +9690,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1732807453089298}
-  m_LocalRotation: {x: 0.10251421, y: 0.81184953, z: 0.5548826, w: -0.14998873}
-  m_LocalPosition: {x: 0.1297699, y: -0.93171406, z: 0.33921778}
+  m_LocalRotation: {x: -0.19365627, y: 0.8061956, z: 0.40382543, w: 0.38661468}
+  m_LocalPosition: {x: -0.46696743, y: -0.8008653, z: 0.3749082}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4339011939512832}
@@ -9544,7 +9794,7 @@ MonoBehaviour:
   cloudsConfig:
     ambientSkyColorIntensity: 1
     scatteringCoef: 0
-    edgeDarkness: 2
+    edgeDarkness: 0.99
     baseErosionIntensity: 0
     detailErosionIntensity: 0.2
     density: 1
@@ -10673,19 +10923,20 @@ MonoBehaviour:
     globalReflectionLayers:
       serializedVersion: 2
       m_Bits: 0
+    updateDefaultEnvironmentReflections: 0
     reflectionCloudsQuality: {fileID: 0}
   cloudsSettings:
     cloudsQualitySettings:
       bottomCloudHeight: 4000
-      topCloudHeight: 11000
+      topCloudHeight: 10000
       raymarchSteps: 150
       stepsInDepthModificator: 0.7
-      transmissionToExit: 0.1
+      transmissionToExit: 0.15
       cloudsRenderResolution: 1
       reprojectionPixelSize: 2
-      lodDistance: 0.325
+      lodDistance: 0.25
       baseNoiseUV: 15
-      detailNoiseUV: 35
+      detailNoiseUV: 45
       useCurlNoise: 0
       baseQuality: 0
       detailQuality: 0
@@ -10700,7 +10951,7 @@ MonoBehaviour:
     cloudsDetailWindIntensity: 0.03
     cloudsUpwardsWindIntensity: 0.031
     cirrusWindIntensity: 0.032
-    cloudsWindDirectionX: 0
+    cloudsWindDirectionX: -0
     cloudsWindDirectionY: -1
     attenuationClamp:
       serializedVersion: 2
@@ -10968,8 +11219,7 @@ MonoBehaviour:
     locationOffset: {x: 0, y: 0}
     weatherAnimSpeedScale: 0
     globalCloudCoverage: 1
-    cirrusCloudsTexture: {fileID: 2800000, guid: 724998a51cd1bcf438cdc5ca572beef4,
-      type: 3}
+    cirrusCloudsTexture: {fileID: 2800000, guid: 724998a51cd1bcf438cdc5ca572beef4, type: 3}
     cirrusCloudsColor:
       serializedVersion: 2
       key0: {r: 0.09019608, g: 0.09019608, b: 0.101960786, a: 1}
@@ -11000,11 +11250,9 @@ MonoBehaviour:
       m_NumColorKeys: 6
       m_NumAlphaKeys: 2
     cirrusCloudsAltitude: 10
-    flatCloudsBaseTexture: {fileID: 2800000, guid: 9b9ac0c14a0678d498b26fb2486005f1,
-      type: 3}
+    flatCloudsBaseTexture: {fileID: 2800000, guid: 9b9ac0c14a0678d498b26fb2486005f1, type: 3}
     flatCloudsBaseTextureTiling: 2
-    flatCloudsDetailTexture: {fileID: 2800000, guid: 3904de3fb7c0ff1419fd3064f8114c90,
-      type: 3}
+    flatCloudsDetailTexture: {fileID: 2800000, guid: 3904de3fb7c0ff1419fd3064f8114c90, type: 3}
     flatCloudsDetailTextureTiling: 12
     flatCloudsDirectLightColor:
       serializedVersion: 2
@@ -11142,8 +11390,7 @@ MonoBehaviour:
     windIntensityTransitionSpeed: 1
     effectTransitionSpeed: 1
     audioTransitionSpeed: 0.1
-    lightningEffect: {fileID: 1573907201630640, guid: 044a06c0461cf464dbd3727572a70d42,
-      type: 3}
+    lightningEffect: {fileID: 1573907201630640, guid: 044a06c0461cf464dbd3727572a70d42, type: 3}
     lightningRange: 500
     lightningHeight: 750
     temperatureChangingSpeed: 1
@@ -11196,7 +11443,7 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    skyFogIntensity: 0.2
+    skyFogIntensity: 0.09
     fogExposure: 1
     useEnviroGroundFog: 0
     useHDRPFog: 1
@@ -11570,35 +11817,38 @@ MonoBehaviour:
   internalHour: 12
   currentHour: 12
   currentDay: 1
-  currentYear: 2018
-  currentTimeInHours: 17677716
-  LST: 641.0238
+  currentYear: 2021
+  currentTimeInHours: 17703996
+  LST: 641.30035
   lastHourUpdate: 12
   hourTime: 0
-  cloudAnim: {x: 0.1, y: 0.1, z: 0}
-  cloudFlatBaseAnim: {x: 0, y: 0}
-  cloudFlatDetailAnim: {x: 0, y: 0}
-  cloudAnimNonScaled: {x: 0, y: 0}
-  cirrusAnim: {x: 0, y: 0}
-  windIntensity: 0
+  cloudAnim: {x: 0.1, y: 0.060170792, z: -0.09215437}
+  cloudFlatBaseAnim: {x: 0, y: -0.0039829235}
+  cloudFlatDetailAnim: {x: 0, y: -0.015931692}
+  cloudAnimNonScaled: {x: 0, y: -0.0039829235}
+  cirrusAnim: {x: 0, y: -0.0016993806}
+  windIntensity: 0.24004571
   shadowIntensityMod: 0
   interiorMode: 0
   lastInteriorZone: {fileID: 0}
   updateFogDensity: 1
   customFogColor: {r: 0, g: 0, b: 0, a: 1}
   customFogIntensity: 0
-  currentWeatherSkyMod: {r: 1, g: 1, b: 1, a: 0}
+  currentWeatherSkyMod: {r: 0, g: 0, b: 0, a: 0}
   currentWeatherLightMod: {r: 1, g: 1, b: 1, a: 0}
-  currentWeatherFogMod: {r: 0.4971195, g: 0.59361964, b: 0.78692967, a: 0.31024146}
+  currentWeatherFogMod: {r: 0.49704722, g: 0.5935759, b: 0.7868924, a: 0.30173856}
   customMoonPhase: 0.0984019
+  globalVolumeLightIntensity: 0.5
   MainLight: {fileID: 0}
   AdditionalLight: {fileID: 0}
   MoonTransform: {fileID: 4165735427187854}
+  enviroVolumeHDRP: {fileID: 0}
   MainLightHDRP: {fileID: 0}
   AdditionalLightHDRP: {fileID: 0}
   lastAmbientSkyUpdate: 0
   lastRelfectionUpdate: 17677716
   lastRelfectionPositionUpdate: {x: 0, y: 60.03, z: 8.73}
+  defaultSkyReflectionTex: {fileID: 0}
   EffectsHolder: {fileID: 0}
   lightningEffect: {fileID: 0}
   GameTime:
@@ -11615,8 +11865,8 @@ MonoBehaviour:
     utcOffset: 0
     Latitude: 0
     Longitude: 0
-    solarTime: 0.8661999
-    lunarTime: 0.07669989
+    solarTime: 0.8663313
+    lunarTime: 0.16682164
     dayNightSwitch: 0.45
   Audio:
     SFXHolderPrefab: {fileID: 126800, guid: 9c3f35feb7ea8e84bbdbd37d8bb2ddf0, type: 3}
@@ -11637,14 +11887,14 @@ MonoBehaviour:
     WeatherPrefabs: []
     zones:
     - {fileID: 114718284944169220}
-    startWeatherPreset: {fileID: 11400000, guid: c48d65dacff7b1649820ff520a058338,
-      type: 2}
+    startWeatherPreset: {fileID: 11400000, guid: c48d65dacff7b1649820ff520a058338, type: 2}
     currentActiveZone: {fileID: 114718284944169220}
     currentActiveWeatherPrefab: {fileID: 0}
     currentActiveWeatherPreset: {fileID: 0}
     lastActiveWeatherPrefab: {fileID: 0}
     lastActiveWeatherPreset: {fileID: 0}
     VFXHolder: {fileID: 0}
+    SFXHolder: {fileID: 0}
     wetness: 0
     curWetness: 0
     snowStrength: 0
@@ -11670,14 +11920,14 @@ MonoBehaviour:
     starsRotation: {fileID: 4007641975995948}
     particleClouds: {fileID: 1946174727360226}
   Fog:
-    skyFogStart: 0
-    skyFogHeight: 5
-    skyFogIntensity: 0.1
+    skyFogStart: 0.2
+    skyFogHeight: 0.45
+    skyFogIntensity: 0.09
     skyFogStrength: 1
-    scatteringStrenght: 1.26
+    scatteringStrenght: 1.25
     sunBlocking: 1
     moonIntensity: 1
-    hdrpRelativeFogHeight: 0
+    hdrpRelativeFogHeight: 50
   LightShafts:
     sunLightShafts: 0
     moonLightShafts: 0
@@ -11695,7 +11945,13 @@ MonoBehaviour:
   currentSceneExposureMod: 1
   currentSkyExposureMod: 1
   currentLightIntensityMod: 1
-  singlePassVR: 0
+  visualEnvironment: {fileID: -5460815618790042378, guid: 39e8ac69a93cb9d49930b16be3afc316, type: 2}
+  enviroHDRPSky: {fileID: 5396244263233550034, guid: 39e8ac69a93cb9d49930b16be3afc316, type: 2}
+  enviroHDRPSkyLite: {fileID: 0}
+  enviroExposure: {fileID: -446164826460301618, guid: 39e8ac69a93cb9d49930b16be3afc316, type: 2}
+  hdrpFog: {fileID: -8592333089731512715, guid: 39e8ac69a93cb9d49930b16be3afc316, type: 2}
+  mySkyAndFogVolume: {fileID: 0}
+  additionalCameras: []
   singlePassInstancedVR: 0
   useVolumeLighting: 1
   useVolumeClouds: 1
@@ -11714,10 +11970,8 @@ MonoBehaviour:
   directVolumeLight: {fileID: 0}
   additionalDirectVolumeLight: {fileID: 0}
   EnviroSkyRender: {fileID: 0}
-  globalVolumeLightIntensity: 0.065
   auroraIntensity: 0
-  currentActiveCloudsQualityPreset: {fileID: 11400000, guid: a836f7605a4cd2b46977d5caf63945fc,
-    type: 2}
+  currentActiveCloudsQualityPreset: {fileID: 11400000, guid: a836f7605a4cd2b46977d5caf63945fc, type: 2}
   cloudsRenderTarget: {fileID: 0}
   weatherMap: {fileID: 0}
   satRenderTarget: {fileID: 0}
@@ -11725,7 +11979,6 @@ MonoBehaviour:
   skyMat: {fileID: 0}
   skyReflectionMat: {fileID: 0}
   cloudsQualityList:
-  - {fileID: 0}
   - {fileID: 11400000, guid: b10a3bd47ef3e9646adbcfa29c9ebb24, type: 2}
   - {fileID: 11400000, guid: 9b1a0dc137fb16841b5c458d1556c627, type: 2}
   - {fileID: 11400000, guid: a836f7605a4cd2b46977d5caf63945fc, type: 2}
@@ -11744,18 +11997,18 @@ MonoBehaviour:
   floatingPointOriginAnchor: {fileID: 0}
   floatingPointOriginMod: {x: 0, y: 0, z: 0}
   ressources:
-    starsTwinklingNoise: {fileID: 0}
-    aurora_layer_1: {fileID: 0}
-    aurora_layer_2: {fileID: 0}
-    aurora_colorshift: {fileID: 0}
-    curlMap: {fileID: 0}
-    noiseTextureHigh: {fileID: 0}
-    noiseTexture: {fileID: 0}
-    detailNoiseTexture: {fileID: 0}
-    detailNoiseTextureHigh: {fileID: 0}
-    dither: {fileID: 0}
-    blueNoise: {fileID: 0}
-    distributionTexture: {fileID: 0}
+    starsTwinklingNoise: {fileID: 8900000, guid: cd6e898ed9788da48ac517f37841cea8, type: 3}
+    aurora_layer_1: {fileID: 2800000, guid: 0f3aa374cdd1a5247b48a8c48016eca2, type: 3}
+    aurora_layer_2: {fileID: 2800000, guid: 9fbd49bae2bd427429d0e8c25e36e9e5, type: 3}
+    aurora_colorshift: {fileID: 2800000, guid: c745f38dc285f034d87b346a6f3a9519, type: 3}
+    curlMap: {fileID: 2800000, guid: fc268ae844de47c428c2d4cd479d7f83, type: 3}
+    noiseTextureHigh: {fileID: 11700000, guid: edb3b4aefdbff4647b7b517b92300d0f, type: 2}
+    noiseTexture: {fileID: 11700000, guid: db78cd4c8da398549b079500e10b0064, type: 2}
+    detailNoiseTexture: {fileID: 11700000, guid: f237e0f9e0bdd5b4ba71a363e0bfcacf, type: 2}
+    detailNoiseTextureHigh: {fileID: 11700000, guid: 5435894e539d47c40bca029243c32534, type: 2}
+    dither: {fileID: 2800000, guid: 7cde6ffc77d342f47886127f37603ef7, type: 3}
+    blueNoise: {fileID: 2800000, guid: 84cb7b9b2fcd22b40a10f9a60b5646e0, type: 3}
+    distributionTexture: {fileID: 2800000, guid: cc705b6a19f02c8478dd469dac9a8df9, type: 3}
 --- !u!114 &114718284944169220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11835,8 +12088,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1924939639452906}
-  m_LocalRotation: {x: 0.55183923, y: -0.01652793, z: 0.010939902, w: 0.83371496}
-  m_LocalPosition: {x: 0.015485031, y: 0.9205148, z: -0.39040065}
+  m_LocalRotation: {x: 0.55199796, y: -0.016934294, z: 0.011213674, w: 0.8335981}
+  m_LocalPosition: {x: 0.01585294, y: 0.92066866, z: -0.3900229}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_Children: []
   m_Father: {fileID: 4339011939512832}

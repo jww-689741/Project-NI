@@ -75,9 +75,10 @@ public class PlayerManager : MonoBehaviour
 
         var cameraState = CameraManager.cameraState; // 카메라 상태값
         var playerPosition = transform.position;
+        var aimingLayer = 1 << LayerMask.NameToLayer("AimPoint"); // 에임 포인트 콜라이더 레이어 특정
 
         // 화면 상의 마우스 포인터 위치로 레이캐스팅
-        if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit))
+        if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit, aimingLayer))
         {
             if (hit.collider.CompareTag("MainCamera"))
             {

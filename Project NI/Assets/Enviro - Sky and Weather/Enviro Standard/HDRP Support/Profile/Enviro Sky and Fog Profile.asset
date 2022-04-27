@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Fog
   m_EditorClassIdentifier: 
   active: 1
+  m_AdvancedMode: 0
   quality:
     m_OverrideState: 0
     m_Value: 1
@@ -25,67 +26,100 @@ MonoBehaviour:
   color:
     m_OverrideState: 0
     m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    hdr: 1
+    showAlpha: 0
+    showEyeDropper: 1
   tint:
     m_OverrideState: 1
-    m_Value: {r: 0.73582405, g: 0.73582405, b: 0.73582405, a: 0.805613}
+    m_Value: {r: 0.25254023, g: 0.25254023, b: 0.25254023, a: 0.8112363}
+    hdr: 1
+    showAlpha: 0
+    showEyeDropper: 1
   maxFogDistance:
     m_OverrideState: 0
     m_Value: 5000
+    min: 0
   mipFogMaxMip:
     m_OverrideState: 0
     m_Value: 0.5
+    min: 0
+    max: 1
   mipFogNear:
     m_OverrideState: 0
     m_Value: 0
+    min: 0
   mipFogFar:
     m_OverrideState: 0
     m_Value: 1000
+    min: 0
   baseHeight:
     m_OverrideState: 0
     m_Value: 0
   maximumHeight:
     m_OverrideState: 1
-    m_Value: 108.92
+    m_Value: 100
   meanFreePath:
     m_OverrideState: 1
     m_Value: 10000
+    min: 1
   enableVolumetricFog:
     m_OverrideState: 1
     m_Value: 1
   albedo:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
   globalLightProbeDimmer:
     m_OverrideState: 0
     m_Value: 1
+    min: 0
+    max: 1
   depthExtent:
     m_OverrideState: 0
     m_Value: 64
+    min: 0.1
   denoisingMode:
     m_OverrideState: 0
     m_Value: 2
   anisotropy:
     m_OverrideState: 1
     m_Value: 0.8
+    min: -1
+    max: 1
   sliceDistributionUniformity:
     m_OverrideState: 0
     m_Value: 0.75
+    min: 0
+    max: 1
   m_FogControlMode:
     m_OverrideState: 0
     m_Value: 0
   screenResolutionPercentage:
     m_OverrideState: 0
     m_Value: 12.5
+    min: 6.25
+    max: 50
   volumeSliceCount:
     m_OverrideState: 0
     m_Value: 64
+    min: 1
+    max: 512
   m_VolumetricFogBudget:
     m_OverrideState: 0
     m_Value: 0.33
+    min: 0
+    max: 1
   m_ResolutionDepthRatio:
     m_OverrideState: 0
     m_Value: 0.666
+    min: 0
+    max: 1
   directionalLightsOnly:
+    m_OverrideState: 0
+    m_Value: 0
+  filter:
     m_OverrideState: 0
     m_Value: 0
 --- !u!114 &-5460815618790042378
@@ -101,21 +135,13 @@ MonoBehaviour:
   m_Name: VisualEnvironment
   m_EditorClassIdentifier: 
   active: 1
+  m_AdvancedMode: 0
   skyType:
     m_OverrideState: 1
     m_Value: 999
-  cloudType:
-    m_OverrideState: 0
-    m_Value: 0
   skyAmbientMode:
     m_OverrideState: 1
     m_Value: 1
-  windOrientation:
-    m_OverrideState: 0
-    m_Value: 0
-  windSpeed:
-    m_OverrideState: 0
-    m_Value: 100
   fogType:
     m_OverrideState: 0
     m_Value: 0
@@ -132,6 +158,7 @@ MonoBehaviour:
   m_Name: Exposure
   m_EditorClassIdentifier: 
   active: 1
+  m_AdvancedMode: 0
   mode:
     m_OverrideState: 1
     m_Value: 0
@@ -143,7 +170,7 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 10.93066
+    m_Value: 1.7787092
   compensation:
     m_OverrideState: 0
     m_Value: 0
@@ -237,15 +264,19 @@ MonoBehaviour:
   adaptationSpeedDarkToLight:
     m_OverrideState: 0
     m_Value: 3
+    min: 0.001
   adaptationSpeedLightToDark:
     m_OverrideState: 0
     m_Value: 1
+    min: 0.001
   weightTextureMask:
     m_OverrideState: 0
     m_Value: {fileID: 0}
   histogramPercentages:
     m_OverrideState: 0
     m_Value: {x: 40, y: 90}
+    min: 0
+    max: 100
   histogramUseCurveRemapping:
     m_OverrideState: 0
     m_Value: 0
@@ -270,6 +301,7 @@ MonoBehaviour:
   proceduralSoftness:
     m_OverrideState: 0
     m_Value: 0.5
+    min: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,21 +332,26 @@ MonoBehaviour:
   m_Name: EnviroSkybox
   m_EditorClassIdentifier: 
   active: 1
+  m_AdvancedMode: 0
   rotation:
     m_OverrideState: 0
     m_Value: 0
+    min: 0
+    max: 360
   skyIntensityMode:
     m_OverrideState: 1
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 11.81122
+    m_Value: 1.0708771
   multiplier:
     m_OverrideState: 0
     m_Value: 1
+    min: 0
   upperHemisphereLuxValue:
     m_OverrideState: 0
     m_Value: 1
+    min: 0
   upperHemisphereLuxColor:
     m_OverrideState: 0
     m_Value: {x: 0, y: 0, z: 0}
@@ -327,6 +364,7 @@ MonoBehaviour:
   updatePeriod:
     m_OverrideState: 0
     m_Value: 0
+    min: 0
   includeSunInBaking:
     m_OverrideState: 0
     m_Value: 0
