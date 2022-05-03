@@ -20,7 +20,7 @@ public class SpinnerBullet : MonoBehaviour, IBulletShot
             timer += Time.deltaTime;
             if (timer < status.GetAttackSpeed()) // 0.5초동안 중앙 탄 전방 발사
             {
-                bulletTransform.Translate(directionVector * Time.deltaTime * status.GetShotSpeed());
+                bulletTransform.Translate(Vector3.forward * Time.deltaTime * status.GetShotSpeed());
             }
             else if (timer > status.GetHoldingTime()) break; // 유지시간을 넘어가면 루프 아웃
             else

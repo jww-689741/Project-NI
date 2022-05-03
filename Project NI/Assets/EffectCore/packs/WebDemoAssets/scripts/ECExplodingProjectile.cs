@@ -91,14 +91,14 @@ public class ECExplodingProjectile : MonoBehaviour
             Instantiate(impactPrefab, pos, rot);
             if (!explodeOnTimer && Missile == false)
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
             else if (Missile == true)
             {
                 thisCollider.enabled = false;
                 particleKillGroup.SetActive(false);
                 thisRigidbody.velocity = Vector3.zero;
-                Destroy(gameObject, 5);
+                gameObject.SetActive(false);
             }
 
         }
@@ -118,7 +118,7 @@ public class ECExplodingProjectile : MonoBehaviour
             Instantiate(impactPrefab, pos, rot);
             if (!explodeOnTimer && Missile == false)
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
             else if (Missile == true)
             {
@@ -127,7 +127,7 @@ public class ECExplodingProjectile : MonoBehaviour
                 particleKillGroup.SetActive(false);
                 thisRigidbody.velocity = Vector3.zero;
 
-                Destroy(gameObject, 5);
+                gameObject.SetActive(false);
 
             }
         }
@@ -136,7 +136,7 @@ public class ECExplodingProjectile : MonoBehaviour
     void Explode()
     {
         Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
 }

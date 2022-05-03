@@ -20,7 +20,7 @@ public class BuckShot : MonoBehaviour, IBulletShot
             if (timer > status.GetHoldingTime()) break;
             for (int i = 0; i < 5; i++)
             {
-                transform.GetChild(i).gameObject.transform.Translate(directionVector * Time.deltaTime * status.GetShotSpeed()); // ÀÚÅº ÅºÈ¯ ¹ß»ç
+                transform.GetChild(i).gameObject.transform.Translate(Vector3.forward * Time.deltaTime * status.GetShotSpeed()); // ÀÚÅº ÅºÈ¯ ¹ß»ç
             }
             yield return null; // ÄÚ·çÆ¾ µô·¹ÀÌ ¾øÀ½
         }

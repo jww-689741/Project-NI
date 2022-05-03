@@ -45,7 +45,7 @@ public class CameraManager : MonoBehaviour
         {
             this.transform.position = Vector3.Lerp(cameraPosition, new Vector3(player.position.x, player.position.y + 3f, player.position.z - 10f), Time.smoothDeltaTime * trackingSpeed);
             this.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            GetComponent<BoxCollider>().center = new Vector3(0, 0, 40);
+            GetComponent<BoxCollider>().center = new Vector3(0, 0, 150);
             cameraState = 0;
             Debug.Log("SetBackview");
         }
