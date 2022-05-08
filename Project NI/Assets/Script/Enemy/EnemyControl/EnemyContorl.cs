@@ -9,8 +9,8 @@ public class EnemyContorl : MonoBehaviour
 
     private GameObject[] enemys; // 적 오브젝트 저장 및 반환을 위한 배열
     private Vector3 position = Vector3.zero; // 스폰 지점 값
-    private List<int> numberOfEnemy = new List<int>(); // 적 생성 개체 수 리스트, List를 사용한 이유는 없으니 다른 리스트로 변경해도 무방
     private List<Dictionary<string, object>> data;
+    private float time = 0;
 
     void Awake()
     {
@@ -19,7 +19,7 @@ public class EnemyContorl : MonoBehaviour
 
     void Start()
     {
-        //StartCoroutine(startSpawn()); // 코루틴 시작
+        StartCoroutine(startSpawn()); // 코루틴 시작
     }
 
     void Update()
@@ -68,26 +68,53 @@ public class EnemyContorl : MonoBehaviour
             }
             i++;
 
-            yield return new WaitForSeconds(10f); // 10초 대기
+            yield return new WaitForSeconds(2f); // 10초 대기
         }
     }
 
     // 적 오브젝트 스폰 메소드
     private void SpawnEnemy(string name, int count)
     {
+        float x = -1;
+        int i = 0;
         enemys = ObjectManager.instance.GetEnemy(name, count); // 적 count 만큼 리스트로 가져오기
 
-        for (int i = 0; i < count; i++) // 리스트의 오브젝트들
+        while (i < count)
         {
-            if (enemys[i] != null)
+            Debug.Log(count);
+
+            if (Timer(generationGap))
             {
-                enemys[i].SetActive(true); // 활성화
-                ChangeSpawnPosition(Random.Range(-10, 10), Random.Range(-10, 10), Random.Range(100, 160));
-                enemys[i].transform.position = position; // 위치 지정
-            }        
-            else
+                if (Random.value > 0.5f)
+                {
+                    x = 1;
+                }
+
+                if (enemys[i] != null)
+                {
+                    ChangeSpawnPosition(x * 10, Random.Range(-20, 21), Random.Range(100, 161));
+                    enemys[i].transform.position = position; // 위치 지정
+                    enemys[i].SetActive(true); // 활성화
+                }
+                else
+                {
+                    Debug.Log("오브젝트 메니저에 " + name + "(이)가 없음");
+                }
+                i++;
+            }
+        }
+    }
+
+    bool Timer(float wTime)
+    {
+        while (true)
+        {
+            time += Time.deltaTime;
+
+            if(time > wTime)
             {
-                Debug.Log("오브젝트 메니저에 " + name + "(이)가 없음");
+                time = 0;
+                return true;
             }
         }
     }
