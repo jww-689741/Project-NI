@@ -14,7 +14,6 @@ public class HowitzerBullet : MonoBehaviour, IBulletShot
     {
         var status = GetComponent<HowitzerBulletStatusManager>(); // 곡사탄환의 스탯 데이터 접근
         var gravity = -Physics.gravity.y; // 중력값
-        Debug.Log("456");
         yield return new WaitForSeconds(0.01f);   // 0.2초 대기
 
         float target_Distance = 50f; // 대상거리

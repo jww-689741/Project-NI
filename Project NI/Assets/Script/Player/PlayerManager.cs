@@ -4,22 +4,36 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public LayerMask layerMask;
+    public GameObject pauseUi;
+
+    public int hasbullets;     //소지한 탄환
+    public int cartridgeCount = 80; // 탄약 카운트
+
+    public static PlayerManager instance; // 싱글톤
 
     private bool repeaterLock; // 연사 제한
     private bool clickLock = false; // 클릭 제한
+    private bool pauseFlag = false; // 일시정지 플래그
+    private int layerMask;
     private float clickTime; // 연속 클릭 시간 체크 시간값
     private float currentHp; // 현재 HP저장 필드
     private delegate void Control();
     Control control;
     private Rigidbody playerRigidbody;
     private Camera camera;
+    private GameObject nearObject = null;  //가까이 있는 아이템
     private RaycastHit hit;
     private Vector3 movementVector;
     private Vector3 muzzlePoint; // 총알 발사 시작지점
     private Vector3 targetPoint; // 총알 발사 목표지점
 
     private float rebound = -1f; // 범위를 벗어났을 때 이동 방향 변화량
+
+    private void Awake()
+    {
+        instance = this;
+        layerMask = (1 << LayerMask.NameToLayer("Terrain")) + (1 << LayerMask.NameToLayer("AimPoint"));
+    }
 
     private void Start()
     {
@@ -31,8 +45,8 @@ public class PlayerManager : MonoBehaviour
         playerRigidbody = this.GetComponent<Rigidbody>();
         camera = Camera.main; // 메인 카메라 컴포넌트를 가져옴
         control += camera.GetComponent<CameraManager>().RotateCamera;
+        control += Pause;
         currentHp = status.GetHP();
-        Debug.Log(currentHp);
     }
 
     private void Update()
@@ -55,19 +69,21 @@ public class PlayerManager : MonoBehaviour
             if (eDirectBulletStatus != null)
             {
                 currentHp -= (eDirectBulletStatus.GetAttackDamage() - pStatus.GetDefense());
-                Debug.Log(currentHp);
             }
             else if (eHowitzerBulletStatus != null)
             {
                 currentHp -= (eHowitzerBulletStatus.GetAttackDamage() - pStatus.GetDefense());
-                Debug.Log(currentHp);
             }
             else if (eSpinnerBulletStatus != null)
             {
                 currentHp -= (eSpinnerBulletStatus.GetAttackDamage() - pStatus.GetDefense());
-                Debug.Log(currentHp);
             }
         }
+    }
+
+    public float GetHp()
+    {
+        return currentHp;
     }
 
     // 조준
@@ -78,7 +94,7 @@ public class PlayerManager : MonoBehaviour
         var playerPosition = transform.position;
 
         // 화면 상의 마우스 포인터 위치로 레이캐스팅
-        if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit, layerMask))
+        if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit,1000, layerMask))
         {
             if (hit.collider.CompareTag("MainCamera"))
             {
@@ -122,6 +138,25 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    private void Pause()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!pauseFlag)
+            {
+                Time.timeScale = 0;
+                pauseUi.SetActive(true);
+                pauseFlag = true;
+            }
+            else
+            {
+                Time.timeScale = 1;
+                pauseUi.SetActive(false);
+                pauseFlag = false;
+            }
+        }
+    }
+
     // 탄환 발사 코루틴
     IEnumerator Repeater()
     {
@@ -131,60 +166,73 @@ public class PlayerManager : MonoBehaviour
         {
             clickTime = Time.time;
             repeaterLock = true; // 연사 활성화
-            while (repeaterLock)
+            if (hasbullets == 0)  // 가지고 있는 탄이 기본일때
             {
-                var targetBullet = ObjectManager.instance.GetBullet("DirectBullet");
-                var attackSpeedToBullet = targetBullet.GetComponent<DirectBullet>().GetAttackSpeedToBullet();
-                SetBullet(targetBullet, "DirectBullet"); // 탄환 발사
-                yield return new WaitForSeconds(attackSpeedToBullet + attackSpeed); // 연사시간만큼 대기
+                while (repeaterLock)
+                {
+                    var targetBullet = ObjectManager.instance.GetBullet("DirectBullet");
+                    var attackSpeedToBullet = targetBullet.GetComponent<DirectBullet>().GetAttackSpeedToBullet();
+                    SetBullet(targetBullet, "DirectBullet"); // 탄환 발사
+                    yield return new WaitForSeconds(attackSpeedToBullet + attackSpeed); // 연사시간만큼 대기
+                    if (hasbullets != 0)
+                        repeaterLock = false;
+
+
+                }
             }
+
+            if (hasbullets == 1)  // 가지고 있는 탄이 곡사일때
+            {
+                while (repeaterLock)
+                {
+                    SetBullet(ObjectManager.instance.GetBullet("HowitzerBullet"), "HowitzerBullet"); // 탄환 발사
+                    --cartridgeCount;
+                    if (cartridgeCount == 0) hasbullets = 0;
+                    yield return new WaitForSeconds(attackSpeed); // 연사시간만큼 대기
+                    if (hasbullets != 1)
+                        repeaterLock = false;
+                }
+            }
+            if (hasbullets == 2) // 가지고 있는 탄이 벅샷일때
+            {
+                while (repeaterLock)
+                {
+                    SetBullet(ObjectManager.instance.GetBullet("Buckshot"), "Buckshot"); // 탄환 발사
+                    --cartridgeCount;
+                    if (cartridgeCount == 0) hasbullets = 0;
+                    yield return new WaitForSeconds(attackSpeed); // 연사시간만큼 대기
+                    if (hasbullets != 2)
+                        repeaterLock = false;
+                }
+            }
+            if (hasbullets == 3) // 가지고 있는 탄이 스피너일때
+            {
+                while (repeaterLock)
+                {
+                    SetBullet(ObjectManager.instance.GetBullet("SpinnerBullet"), "SpinnerBullet"); // 탄환 발사
+                    --cartridgeCount;
+                    if (cartridgeCount == 0) hasbullets = 0;
+                    yield return new WaitForSeconds(attackSpeed); // 연사시간만큼 대기
+                    if (hasbullets != 3)
+                        repeaterLock = false;
+                }
+            }
+
+            if (hasbullets == 4) // 가지고 있는 탄이 체이서일때
+            {
+                while (repeaterLock)
+                {
+                    SetBullet(ObjectManager.instance.GetBullet("ChaserBullet"), "ChaserBullet"); // 탄환 발사
+                    --cartridgeCount;
+                    if (cartridgeCount == 0) hasbullets = 0;
+                    yield return new WaitForSeconds(attackSpeed); // 연사시간만큼 대기
+                    if (hasbullets != 4)
+                        repeaterLock = false;
+                }
+            }
+
         }
         else if (Input.GetMouseButtonUp(0))
-        {
-            if (Time.time - clickTime < attackSpeed) clickLock = true;
-            repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
-        }
-        if (Input.GetMouseButtonDown(1) && !clickLock) // 마우스 좌클릭 유지중일 때
-        {
-            clickTime = Time.time;
-            repeaterLock = true; // 연사 활성화
-            while (repeaterLock)
-            {
-                SetBullet(ObjectManager.instance.GetBullet("HowitzerBullet"), "HowitzerBullet"); // 탄환 발사
-                yield return new WaitForSeconds(attackSpeed); // 연사시간만큼 대기
-            }
-        }
-        else if (Input.GetMouseButtonUp(1)) // 마우스 좌클릭에서 손을 뗄때
-        {
-            if (Time.time - clickTime < attackSpeed) clickLock = true;
-            repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
-        }
-        if (Input.GetMouseButtonDown(4) && !clickLock) // 마우스 좌클릭 유지중일 때
-        {
-            clickTime = Time.time;
-            repeaterLock = true; // 연사 활성화
-            while (repeaterLock)
-            {
-                SetBullet(ObjectManager.instance.GetBullet("Buckshot"), "Buckshot"); // 탄환 발사
-                yield return new WaitForSeconds(attackSpeed); // 연사시간만큼 대기
-            }
-        }
-        else if (Input.GetMouseButtonUp(4)) // 마우스 좌클릭에서 손을 뗄때
-        {
-            if (Time.time - clickTime < attackSpeed) clickLock = true;
-            repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
-        }
-        if (Input.GetMouseButtonDown(3) && !clickLock) // 마우스 좌클릭 유지중일 때
-        {
-            clickTime = Time.time;
-            repeaterLock = true; // 연사 활성화
-            while (repeaterLock)
-            {
-                SetBullet(ObjectManager.instance.GetBullet("SpinnerBullet"), "SpinnerBullet"); // 탄환 발사
-                yield return new WaitForSeconds(attackSpeed); // 연사시간만큼 대기
-            }
-        }
-        else if (Input.GetMouseButtonUp(3)) // 마우스 좌클릭에서 손을 뗄때
         {
             if (Time.time - clickTime < attackSpeed) clickLock = true;
             repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
@@ -197,7 +245,7 @@ public class PlayerManager : MonoBehaviour
     {
         var bulletTf = bullet.transform; // 탄환의 transform값
         var playerTf = this.transform; // 플레이어의 transform값
-        bulletTf.position = new Vector3(playerTf.position.x, playerTf.position.y, playerTf.position.z); // 위치 지정
+        bulletTf.position = new Vector3(playerTf.position.x, playerTf.position.y, playerTf.position.z + 3); // 위치 지정
         var directionVector = (targetPoint - bulletTf.position).normalized; // 탄환이 발사 될 방향벡터 연산
 
         if (bullet == null) return; // 받아올 탄환이 없을 경우 반환
@@ -210,7 +258,6 @@ public class PlayerManager : MonoBehaviour
         }
         else if (name == "HowitzerBullet")
         {
-            Debug.Log("123");
             bullet.GetComponent<HowitzerBullet>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
         }
         else if (name == "Buckshot")
@@ -233,5 +280,49 @@ public class PlayerManager : MonoBehaviour
             }
             bullet.GetComponent<SpinnerBullet>().StartCoroutine("Shot", Vector3.forward); // 탄환 동작 로직 코루틴 시작
         }
+        else if (name == "ChaserBullet")
+        {
+            bullet.GetComponent<ChaserBullet>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
+        }
+    }
+
+    private void Interation()
+    {
+        if (nearObject != null)
+        {
+            if (nearObject.tag == "Bullet")
+            {
+                ItemManager item = nearObject.GetComponent<ItemManager>();
+                hasbullets = item.value;
+                Debug.Log(hasbullets);
+                cartridgeCount = 80;
+                nearObject.SetActive(false);
+            }
+        }
+    }
+    // 아이템 오브젝트 감지
+    private void OnTriggerStay(Collider other)  // 아이템이 감지될 경우
+    {
+        if (other.tag == "Bullet")
+        {
+            nearObject = other.gameObject;
+            Interation();
+        }
+
+        if (other.tag == "Item")
+        {
+            nearObject = other.gameObject;
+        }
+
+    }
+    // 아이템 오브젝트 감지
+    private void OnTriggerExit(Collider other)  // 아이템이 감지되지 않을 경우
+    {
+        if (other.tag == "Bullet")
+            nearObject = null;
+
+        if (other.tag == "Item")
+            nearObject = null;
+
     }
 }

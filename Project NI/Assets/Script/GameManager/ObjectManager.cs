@@ -75,8 +75,8 @@ public class ObjectManager : MonoBehaviour
     // 오브젝트 사전 생성
     private void Start()
     {
-        if (bulletinfo.Length < 1) SetBullet(bulletinfo[0].prefab, bulletinfo[0].count, bulletinfo[0].name); // 리스트의 내용이 하나일 경우
-        else // 리스트의 내용이 둘 이상인 경우
+        if (bulletinfo.Length == 1) SetBullet(bulletinfo[0].prefab, bulletinfo[0].count, bulletinfo[0].name); // 리스트의 내용이 하나일 경우
+        else if(bulletinfo.Length > 1) // 리스트의 내용이 둘 이상인 경우
         {
             for (int i = 0; i < bulletinfo.Length; i++)
             {
@@ -85,8 +85,8 @@ public class ObjectManager : MonoBehaviour
         }
 
         // 적 세팅
-        if (enemyinfo.Length < 1) SetEnemy(enemyinfo[0].prefab, enemyinfo[0].count, enemyinfo[0].name); // 리스트의 내용이 하나일 경우
-        else // 리스트의 내용이 둘 이상인 경우
+        if (enemyinfo.Length == 1) SetEnemy(enemyinfo[0].prefab, enemyinfo[0].count, enemyinfo[0].name); // 리스트의 내용이 하나일 경우
+        else if (bulletinfo.Length > 1) // 리스트의 내용이 둘 이상인 경우
         {
             for (int i = 0; i < enemyinfo.Length; i++)
             {
