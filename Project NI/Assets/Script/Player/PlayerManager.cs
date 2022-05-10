@@ -49,7 +49,7 @@ public class PlayerManager : MonoBehaviour
         currentHp = status.GetHP();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         control();
     }
@@ -63,20 +63,23 @@ public class PlayerManager : MonoBehaviour
         var eDirectBulletStatus = other.GetComponent<DirectBulletStatusManager>();
         var eHowitzerBulletStatus = other.GetComponent<HowitzerBulletStatusManager>();
         var eSpinnerBulletStatus = other.GetComponent<SpinnerBulletStausManager>();
-        if (other.CompareTag("EnemyBullet"))
+        if (other.CompareTag("EnemyBullet") || other.CompareTag("Bullet"))
         {
             // 피격당한 발사체의 공격력 - 플레이어의 방어력만큼의 데미지를 현재 체력에서 감산
             if (eDirectBulletStatus != null)
             {
                 currentHp -= (eDirectBulletStatus.GetAttackDamage() - pStatus.GetDefense());
+                other.gameObject.SetActive(false);
             }
             else if (eHowitzerBulletStatus != null)
             {
                 currentHp -= (eHowitzerBulletStatus.GetAttackDamage() - pStatus.GetDefense());
+                other.gameObject.SetActive(false);
             }
             else if (eSpinnerBulletStatus != null)
             {
                 currentHp -= (eSpinnerBulletStatus.GetAttackDamage() - pStatus.GetDefense());
+                other.gameObject.SetActive(false);
             }
         }
     }

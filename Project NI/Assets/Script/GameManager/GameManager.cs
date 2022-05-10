@@ -13,7 +13,11 @@ public class GameManager : MonoBehaviour
     public Text scoreUi; // 스코어 UI 텍스트
     public Text hpText; // HP 텍스트
     public Image hpBar; // HP 바
+    public GameObject missileCart; // 미사일 발사 오브젝트
+    public Text missileCartUi; // 미사일 카트리지 UI
+    public Text ScoreUi; // 스코어 UI
     private float genaralTime = 0f; // 게임 진행시간
+    private int totalScore = 0;
     private delegate void Control();
     Control control;
 
@@ -22,6 +26,8 @@ public class GameManager : MonoBehaviour
         control = SetTimer;
         control += SetPlayerHp;
         control += SetBulletCount;
+        control += SetBoom;
+        control += SetScore;
     }
     void FixedUpdate()
     {
@@ -51,7 +57,9 @@ public class GameManager : MonoBehaviour
     // 스코어 계산 할 때마다 UI에 값 입력
     private void SetScore()
     {
-
+        totalScore += Lol.score;
+        Debug.Log(totalScore + "잭스");
+        ScoreUi.text = totalScore.ToString();
     }
 
     // 체력 게이지 증감
@@ -74,7 +82,7 @@ public class GameManager : MonoBehaviour
     // 전탄발사 카운트 증감
     private void SetBoom()
     {
-
+        missileCartUi.text = "X " + (missileCart.GetComponent<MissileLauncher>().GetCart()).ToString();
     }
 
     // 탄환 소모 카운트 증감

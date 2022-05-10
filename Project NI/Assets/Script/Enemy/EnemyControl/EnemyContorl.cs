@@ -19,7 +19,7 @@ public class EnemyContorl : MonoBehaviour
 
     void Start()
     {
-        //StartCoroutine(startSpawn()); // 코루틴 시작
+        StartCoroutine(startSpawn()); // 코루틴 시작
     }
 
     void Update()

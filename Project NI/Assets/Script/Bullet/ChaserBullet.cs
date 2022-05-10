@@ -17,7 +17,7 @@ public class ChaserBullet : MonoBehaviour
         while (true)
         {
             timer += Time.deltaTime;
-            if (timer > 2) break;
+            if (timer > status.GetHoldingTime()) break;
             transform.forward = Vector3.Lerp(transform.forward, directionVector, 0.25f);
             transform.Translate(transform.forward * Time.deltaTime * status.GetShotSpeed());
             if (m_tfTarget != null)
@@ -48,11 +48,12 @@ public class ChaserBullet : MonoBehaviour
             m_tfTarget = t_cols[Random.Range(0, t_cols.Length)].transform;
         }
     }
-    private void OnCollisionEnter(Collision collision)  //태그가 Enemy인 컬라이더와 충돌하면 둘다 삭제
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.transform.CompareTag("Enemy"))
+        if (other.transform.CompareTag("Enemy"))
         {
-            Destroy(collision.gameObject);
+            // Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
             gameObject.SetActive(false);
         }
     }
