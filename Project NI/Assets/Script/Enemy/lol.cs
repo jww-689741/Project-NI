@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class lol : MonoBehaviour
+public class LoL : MonoBehaviour
 {
     public GameObject hit; // 피격 효과
     public GameObject explosion; // 파괴 효과
@@ -15,8 +14,6 @@ public class lol : MonoBehaviour
     private float timer = 0; // 적 공격 간격 주는 타이머
     private delegate void Control();
     Control control;
-
-    private float movementSpeed; // 이동속도
 
     private void Awake()
     {
@@ -93,7 +90,7 @@ public class lol : MonoBehaviour
 
         if (other.gameObject.transform.parent != null) // 부모 오브젝트가 있을 때
         {
-            if (parent.CompareTag("FX")) // 부모의 태그가 FX일 때
+            if (parent.CompareTag("Bullet")) // 부모의 태그가 FX일 때
             {
                 other.gameObject.SetActive(false); // 충돌한 탄환 오브젝트 비활성화
 
@@ -110,7 +107,7 @@ public class lol : MonoBehaviour
                     Debug.Log(currentHp);
                 }
             } 
-            else if (other.CompareTag("FX"))
+            else if (other.CompareTag("Bullet"))
             {
                 DirectBulletStatus = other.GetComponent<DirectBulletStatusManager>();
                 HowitzerBulletStatus = other.GetComponent<HowitzerBulletStatusManager>();
