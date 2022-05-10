@@ -5,9 +5,9 @@ using UnityEngine;
 public class EnemyContorl : MonoBehaviour
 {
     public float generationGap;
-    public Transform player; // 플레이어 좌표를 저장
 
     private GameObject[] enemys; // 적 오브젝트 저장 및 반환을 위한 배열
+    private Transform player; // 플레이어 좌표를 저장
     private Vector3 position = Vector3.zero; // 스폰 지점 값
     private List<Dictionary<string, object>> data;
     private float time = 0;
@@ -19,6 +19,7 @@ public class EnemyContorl : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.FindWithTag("Player").transform;
         StartCoroutine(startSpawn()); // 코루틴 시작
     }
 
