@@ -24,7 +24,7 @@ public class Sara : MonoBehaviour
 
     void Update()
     {
-        move();
+        //move();
         LinearMovement(direction);
     }
 

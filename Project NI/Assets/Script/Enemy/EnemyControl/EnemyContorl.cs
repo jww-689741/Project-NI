@@ -5,12 +5,12 @@ using UnityEngine;
 public class EnemyContorl : MonoBehaviour
 {
     public float generationGap;
+    public Transform player; // 플레이어 좌표를 저장
 
     private GameObject[] enemys; // 적 오브젝트 저장 및 반환을 위한 배열
-    private Transform player; // 플레이어 좌표를 저장
     private Vector3 position = Vector3.zero; // 스폰 지점 값
+    private List<int> numberOfEnemy = new List<int>(); // 적 생성 개체 수 리스트, List를 사용한 이유는 없으니 다른 리스트로 변경해도 무방
     private List<Dictionary<string, object>> data;
-    private float time = 0;
 
     void Awake()
     {
@@ -19,7 +19,6 @@ public class EnemyContorl : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
         StartCoroutine(startSpawn()); // 코루틴 시작
     }
 
@@ -33,89 +32,64 @@ public class EnemyContorl : MonoBehaviour
         int i = 0; // counts 용
 
         int sara, billy, betty, irving, selma; // 각 개체수 저장
+        string time;
 
-        while (true) // stop이 true일 동안 반복
+        while (true)
         {
             if (data.Count - 1 == i) // data에 더이상 값이 없을 경우
             {
                 break; //반복문이 종료된다.
             }
 
-            sara = int.Parse((data[i]["sara"] + "")); // 오브젝트 형 문자열로 변경
-            billy = int.Parse((data[i]["billy"] + "")); // 오브젝트 형 문자열로 변경
-            betty = int.Parse((data[i]["betty"] + "")); // 오브젝트 형 문자열로 변경
-            irving = int.Parse((data[i]["irving"] + "")); // 오브젝트 형 문자열로 변경
-            selma = int.Parse((data[i]["selma"] + "")); // 오브젝트 형 문자열로 변경
+            sara = int.Parse(data[i]["sara"] + "");
+            billy = int.Parse(data[i]["billy"] + "");
+            betty = int.Parse(data[i]["betty"] + "");
+            irving = int.Parse(data[i]["irving"] + "");
+            selma = int.Parse(data[i]["selma"] + "");
+            time = data[i]["time"] + "";
 
             if (sara != 0) // 적 1 데이터가 0이 아닐 때
             {
-                SpawnEnemy("sara", sara);
+                SpawnEnemy("sara", sara, 0);
             }
             if (billy != 0) // 적 2 데이터가 0이 아닐 때
             {
-                SpawnEnemy("billy", billy);
+                SpawnEnemy("billy", billy, 0);
             }
             if (betty != 0) // 적 3 데이터가 0이 아닐 때
             {
-                SpawnEnemy("betty", betty);
+                SpawnEnemy("betty", betty, 0);
             }
             if (irving != 0) // 적 4 데이터가 0이 아닐 때
             {
-                SpawnEnemy("irving", irving);
+                SpawnEnemy("irving", irving, 0);
             }
             if (selma != 0) // 적 5 데이터가 0이 아닐 때
             {
-                SpawnEnemy("selma", selma);
+                SpawnEnemy("selma", selma, 0);
             }
             i++;
 
-            yield return new WaitForSeconds(2f); // 10초 대기
+            yield return new WaitForSeconds(10f); // 10초 대기
         }
     }
 
     // 적 오브젝트 스폰 메소드
-    private void SpawnEnemy(string name, int count)
+    private void SpawnEnemy(string name, int count, int time)
     {
-        float x = -1;
-        int i = 0;
         enemys = ObjectManager.instance.GetEnemy(name, count); // 적 count 만큼 리스트로 가져오기
 
-        while (i < count)
+        for (int i = 0; i < count; i++) // 리스트의 오브젝트들
         {
-            Debug.Log(count);
-
-            if (Timer(generationGap))
+            if (enemys[i] != null)
             {
-                if (Random.value > 0.5f)
-                {
-                    x = 1;
-                }
-
-                if (enemys[i] != null)
-                {
-                    ChangeSpawnPosition(x * 10, Random.Range(-20, 21), Random.Range(100, 161));
-                    enemys[i].transform.position = position; // 위치 지정
-                    enemys[i].SetActive(true); // 활성화
-                }
-                else
-                {
-                    Debug.Log("오브젝트 메니저에 " + name + "(이)가 없음");
-                }
-                i++;
-            }
-        }
-    }
-
-    bool Timer(float wTime)
-    {
-        while (true)
-        {
-            time += Time.deltaTime;
-
-            if(time > wTime)
+                enemys[i].SetActive(true); // 활성화
+                ChangeSpawnPosition(Random.Range(-10, 10), Random.Range(-10, 10), Random.Range(100, 160));
+                enemys[i].transform.position = position; // 위치 지정
+            }        
+            else
             {
-                time = 0;
-                return true;
+                Debug.Log("오브젝트 메니저에 " + name + "(이)가 없음");
             }
         }
     }
