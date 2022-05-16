@@ -13,6 +13,7 @@ public class Lol : MonoBehaviour
     private Transform player; // 플레이어 좌표를 가져오기 위한 오브젝트
     private float currentHp; // 현재 HP저장 필드
     private float timer = 0; // 적 공격 간격 주는 타이머
+    private bool effectFlag; // 이펙트 플래그
     public static int score; // 스코어
     private delegate void Control();
     Control control;
@@ -27,6 +28,7 @@ public class Lol : MonoBehaviour
         var status = GetComponent<SaraStatusManager>();
         currentHp = status.GetHP();
         score = 0;
+        effectFlag = false;
         player = GameObject.FindWithTag("Player").transform;
 
         control += CheckCameraPosition;
@@ -142,20 +144,20 @@ public class Lol : MonoBehaviour
                 }
             }
         }
-
         CheckHP();
     }
 
     void CheckHP()
     {
         var status = GetComponent<SaraStatusManager>();
-        if (currentHp <= 0)
+        if (currentHp <= 0 && !effectFlag)
         {
-            this.gameObject.SetActive(false);
-            score += 6974;
-            Debug.Log(score + "야스");
             // 파괴 효과
             Instantiate(explosion, this.transform.position, this.transform.rotation);
+            this.gameObject.SetActive(false);
+            Debug.Log("미친");
+            score += 100;
+            effectFlag = true;
         }
     }
 

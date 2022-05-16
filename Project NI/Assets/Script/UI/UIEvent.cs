@@ -12,6 +12,7 @@ public class UIEvent : MonoBehaviour
     public GameObject gameQuitPopUp;
     public GameObject settingWindow;
     public GameObject upgradeWindow;
+    public GameObject playerSelectWindow;
 
     // 팝업 활성화
     public void PopUpActivation()
@@ -52,6 +53,11 @@ public class UIEvent : MonoBehaviour
     public void UpgradeActivation()
     {
         upgradeWindow.SetActive(true);
+    }
+
+    public void PlayerSelectActivation()
+    {
+        playerSelectWindow.SetActive(true);
     }
 
     // 스테이지 이어하기

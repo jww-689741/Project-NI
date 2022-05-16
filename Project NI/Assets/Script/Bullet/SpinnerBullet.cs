@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpinnerBullet : MonoBehaviour, IBulletShot
 {
-    public IEnumerator Shot(Vector3 directionVector)
+    public IEnumerator Shot()
     {
         var status = GetComponent<SpinnerBulletStausManager>();
         var timer = 0f; // 전체 탄 지속시간용

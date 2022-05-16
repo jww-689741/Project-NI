@@ -10,7 +10,7 @@ public class HowitzerBullet : MonoBehaviour, IBulletShot
         return status.GetAttackSpeed();
     }
 
-    public IEnumerator Shot(Vector3 directionVector)
+    public IEnumerator Shot()
     {
         var status = GetComponent<HowitzerBulletStatusManager>(); // 곡사탄환의 스탯 데이터 접근
         var gravity = -Physics.gravity.y; // 중력값

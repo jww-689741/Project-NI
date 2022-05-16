@@ -14,7 +14,7 @@ public class DirectBullet : MonoBehaviour, IBulletShot
     }
 
     // 발사 추상 코루틴 재정의
-    public IEnumerator Shot(Vector3 directionVector)
+    public IEnumerator Shot()
     {
         var status = GetComponent<DirectBulletStatusManager>(); // 직사탄환의 스탯 데이터 접근
         float timer = 0;
