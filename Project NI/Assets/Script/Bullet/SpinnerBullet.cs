@@ -45,4 +45,10 @@ public class SpinnerBullet : MonoBehaviour, IBulletShot
         var status = GetComponent<SpinnerBulletStausManager>();
         return status.GetAttackSpeed();
     }
+
+    public float GetAttackDamageToBullet()
+    {
+        var status = GetComponent<SpinnerBulletStausManager>();
+        return status.GetAttackDamage();
+    }
 }

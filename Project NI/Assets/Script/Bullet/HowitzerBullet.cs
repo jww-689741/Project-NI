@@ -38,4 +38,10 @@ public class HowitzerBullet : MonoBehaviour, IBulletShot
         }
         this.gameObject.SetActive(false); // 비활성화
     }
+
+    public float GetAttackDamageToBullet()
+    {
+        var status = GetComponent<HowitzerBulletStatusManager>(); // 곡사탄환의 스탯 데이터 접근
+        return status.GetAttackDamage();
+    }
 }

@@ -13,8 +13,6 @@ public class Lol : MonoBehaviour
     private Transform player; // 플레이어 좌표를 가져오기 위한 오브젝트
     private float currentHp; // 현재 HP저장 필드
     private float timer = 0; // 적 공격 간격 주는 타이머
-    private bool effectFlag; // 이펙트 플래그
-    public static int score; // 스코어
     private delegate void Control();
     Control control;
 
@@ -27,8 +25,6 @@ public class Lol : MonoBehaviour
     {
         var status = GetComponent<SaraStatusManager>();
         currentHp = status.GetHP();
-        score = 0;
-        effectFlag = false;
         player = GameObject.FindWithTag("Player").transform;
 
         control += CheckCameraPosition;
@@ -150,14 +146,12 @@ public class Lol : MonoBehaviour
     void CheckHP()
     {
         var status = GetComponent<SaraStatusManager>();
-        if (currentHp <= 0 && !effectFlag)
+        if (currentHp <= 0)
         {
             // 파괴 효과
             Instantiate(explosion, this.transform.position, this.transform.rotation);
             this.gameObject.SetActive(false);
-            Debug.Log("미친");
-            score += 100;
-            effectFlag = true;
+            GameManager.instance.score += 100; // 스코어 누적
         }
     }
 
@@ -181,11 +175,11 @@ public class Lol : MonoBehaviour
 
         if (name == "DirectBullet")
         {
-            bullet.GetComponent<DirectBullet>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
+            bullet.GetComponent<DirectBullet>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
         }
         else if (name == "HowitzerBullet")
         {
-            bullet.GetComponent<HowitzerBullet>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
+            bullet.GetComponent<HowitzerBullet>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
         }
         else if (name == "Buckshot")
         {
@@ -193,7 +187,7 @@ public class Lol : MonoBehaviour
             {
                 bullet.transform.GetChild(i).transform.position = bullet.transform.position;  //자식 오브젝트 부모와 동일한 위치로 이동
             }
-            bullet.GetComponent<BuckShot>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
+            bullet.GetComponent<BuckShot>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
         }
     }
 }

@@ -42,7 +42,6 @@ public class PlayerMove : MonoBehaviour
         if (playerPosition.y >= 20)
         {
             playerRigidbody.velocity = movementVector;
-            Debug.Log(movementVector);
             rebound = -1f;
         }
         else if (playerPosition.y < 20)

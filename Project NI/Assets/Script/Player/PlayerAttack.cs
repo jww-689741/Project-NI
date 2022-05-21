@@ -56,6 +56,12 @@ public class PlayerAttack : MonoBehaviour
             repeaterLock = false; // 마우스 좌클릭에서 손을 뗄때
         }
     }
+    
+    public float GetAttack()
+    {
+        return pDamage.currentValue;
+    }
+
     // 조준
     public void Aiming()
     {

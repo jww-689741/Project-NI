@@ -27,4 +27,10 @@ public class BuckShot : MonoBehaviour, IBulletShot
 
         this.gameObject.SetActive(false); // 비활성화
     }
+
+    public float GetAttackDamageToBullet()
+    {
+        var status = GetComponent<DirectBulletStatusManager>(); // 직사탄환의 스탯 데이터 접근
+        return status.GetAttackDamage(); // 공격력 값 반환
+    }
 }

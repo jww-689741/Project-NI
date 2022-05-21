@@ -15,10 +15,19 @@ public class PlayerHealth : MonoBehaviour
     private Text contentText; // HP바 텍스트
 
     [SerializeField]
-    private Stat hp; // 스탯 값
+    private Stat hp; // 체력 값
 
     [SerializeField]
     private float maxHp; // 체력 최대값
+
+    [SerializeField]
+    private Stat defense; // 방어율 값
+
+    [SerializeField]
+    private float maxDefense; // 방어율 최대값
+
+    [SerializeField]
+    private float currentDefense; // 방어율 현재값
 
     // 보간 속도
     [SerializeField]
@@ -27,6 +36,7 @@ public class PlayerHealth : MonoBehaviour
     private void Start()
     {
         hp.SetDefaultStat(maxHp, maxHp); // 체력 값 초기화
+        defense.SetDefaultStat(currentDefense, maxDefense);
         contentText.text = hp.currentValue + " / " + hp.maxValue;
     }
     // 사망 감지
@@ -51,21 +61,33 @@ public class PlayerHealth : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Bullet"))
         {
-            Damage();
+            GameManager.instance.pAttack = GetComponent<PlayerAttack>().GetAttack();
+            if(other.GetComponent<DirectBullet>() != null)
+            {
+                hp.currentValue -= GameManager.instance.GetDamage(0, defense.currentValue, other.GetComponent<DirectBullet>().GetAttackDamageToBullet());
+            }
+            else if (other.GetComponent<ChaserBullet>() != null)
+            {
+                hp.currentValue -= GameManager.instance.GetDamage(0, defense.currentValue, other.GetComponent<ChaserBullet>().GetAttackDamageToBullet());
+            }
+            else if (other.GetComponent<MissileBomb>() != null)
+            {
+                hp.currentValue -= GameManager.instance.GetDamage(0, defense.currentValue, other.GetComponent<MissileBomb>().GetAttackDamageToBullet());
+            }
+            else if (other.GetComponent<HowitzerBullet>() != null)
+            {
+                hp.currentValue -= GameManager.instance.GetDamage(0, defense.currentValue, other.GetComponent<HowitzerBullet>().GetAttackDamageToBullet());
+            }
+            else if (other.GetComponent<SpinnerBullet>() != null)
+            {
+                hp.currentValue -= GameManager.instance.GetDamage(0, defense.currentValue, other.GetComponent<SpinnerBullet>().GetAttackDamageToBullet());
+            }
             other.gameObject.SetActive(false);
         }
         else if (hp.GetRatio() > 0 && other.gameObject.CompareTag("RecItem"))
         {
             Recovery();
         }
-    }
-
-    // 피격 시 동작 메소드
-    // 데미지 값 호출 필요
-    public void Damage()
-    {
-        hp.currentValue -= 100; // 데미지 값 감산
-        Debug.Log(hp.currentValue);
     }
 
     // 회복 시 동작 메소드

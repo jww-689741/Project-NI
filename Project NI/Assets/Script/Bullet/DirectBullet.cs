@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class DirectBullet : MonoBehaviour, IBulletShot
@@ -11,6 +10,12 @@ public class DirectBullet : MonoBehaviour, IBulletShot
     {
         var status = GetComponent<DirectBulletStatusManager>(); // 직사탄환의 스탯 데이터 접근
         return status.GetAttackSpeed(); // 공격속도 값 반환
+    }
+
+    public float GetAttackDamageToBullet()
+    {
+        var status = GetComponent<DirectBulletStatusManager>(); // 직사탄환의 스탯 데이터 접근
+        return status.GetAttackDamage(); // 공격력 값 반환
     }
 
     // 발사 추상 코루틴 재정의
