@@ -24,14 +24,13 @@ public class Sara : MonoBehaviour
 
     void Update()
     {
-        //move();
+        move();
         LinearMovement(direction);
     }
 
     // 이동 메소드
     private void move()
     {
-        enemyTransform.LookAt(player); // 플레이어를 바라보게 한다.
         enemyTransform.position = Vector3.MoveTowards(enemyTransform.position, position, movementSpeed * Time.deltaTime); // 현재 좌표에서 목표 좌표로 기제된 속도로 이동
     }
 

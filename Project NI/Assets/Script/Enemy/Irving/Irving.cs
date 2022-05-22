@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy4 : MonoBehaviour
+public class Irving : MonoBehaviour
 {
-    public float movementSpeed; // 이동속도
-    Transform player; // 플레이어 좌표를 가져오기 위한 오브젝트
-
     private Vector3 position = Vector3.zero; // 목표 지점 벡터 값, 이 값으로 오브젝트가 움직인다.
-    private Rigidbody rb; // 리지드 바디
+    private Transform player; // 플레이어 좌표를 가져오기 위한 오브젝트
     private Transform enemyTransform; // 자기 자신의 좌표를 저장
+    private float movementSpeed; // 이동속도
+    private bool direction;
 
     private void Awake()
     {
@@ -18,20 +17,22 @@ public class Enemy4 : MonoBehaviour
 
     void Start()
     {
+        var status = GetComponent<SaraStatusManager>();
         player = GameObject.FindWithTag("Player").transform;
-        position = enemyTransform.position; // 초기 좌표를 목표 좌표에 입력, 대형을 유지하기 위해 필요
+        position = enemyTransform.position;
+        movementSpeed = status.GetMoveSpeed();
+        direction = Random.value > 0.5f;
     }
 
     void Update()
     {
-        move(); // 델리게이트 control 실행
+        move();
         StepMovement();
     }
 
     // 이동 메소드
     private void move()
     {
-        enemyTransform.LookAt(player); // 플레이어를 바라보게 한다.
         enemyTransform.position = Vector3.MoveTowards(enemyTransform.position, position, movementSpeed * Time.deltaTime); // 현재 좌표에서 목표 좌표로 기제된 속도로 이동
     }
 

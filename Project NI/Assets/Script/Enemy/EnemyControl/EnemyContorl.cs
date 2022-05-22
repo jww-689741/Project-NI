@@ -11,11 +11,7 @@ public class EnemyContorl : MonoBehaviour
     private Vector3 position = Vector3.zero; // 스폰 지점 값
     private List<int> numberOfEnemy = new List<int>(); // 적 생성 개체 수 리스트, List를 사용한 이유는 없으니 다른 리스트로 변경해도 무방
     private List<Dictionary<string, object>> data;
-
-    void Awake()
-    {
-        data = ReadCSV.Read("StageInformation");
-    }
+    private int count = 1;
 
     void Start()
     {
@@ -30,52 +26,52 @@ public class EnemyContorl : MonoBehaviour
     private IEnumerator startSpawn()
     {
         int i = 0; // counts 용
-
         int sara, billy, betty, irving, selma; // 각 개체수 저장
-        string time;
+        data = ReadCSV.Read("Stage" + count + "Information");
 
         while (true)
         {
             if (data.Count - 1 == i) // data에 더이상 값이 없을 경우
             {
+                count++;
+                StartCoroutine(startSpawn()); // 코루틴 시작
                 break; //반복문이 종료된다.
             }
 
-            sara = int.Parse(data[i]["sara"] + "");
-            billy = int.Parse(data[i]["billy"] + "");
-            betty = int.Parse(data[i]["betty"] + "");
-            irving = int.Parse(data[i]["irving"] + "");
-            selma = int.Parse(data[i]["selma"] + "");
-            time = data[i]["time"] + "";
+            sara = int.Parse((data[i]["sara"] + "")); // 오브젝트 형 문자열로 변경
+            billy = int.Parse((data[i]["billy"] + "")); // 오브젝트 형 문자열로 변경
+            betty = int.Parse((data[i]["betty"] + "")); // 오브젝트 형 문자열로 변경
+            irving = int.Parse((data[i]["irving"] + "")); // 오브젝트 형 문자열로 변경
+            selma = int.Parse((data[i]["selma"] + "")); // 오브젝트 형 문자열로 변경
 
             if (sara != 0) // 적 1 데이터가 0이 아닐 때
             {
-                SpawnEnemy("sara", sara, 0);
+                SpawnEnemy("sara", sara);
             }
             if (billy != 0) // 적 2 데이터가 0이 아닐 때
             {
-                SpawnEnemy("billy", billy, 0);
+                SpawnEnemy("billy", billy);
             }
             if (betty != 0) // 적 3 데이터가 0이 아닐 때
             {
-                SpawnEnemy("betty", betty, 0);
+                SpawnEnemy("betty", betty);
             }
             if (irving != 0) // 적 4 데이터가 0이 아닐 때
             {
-                SpawnEnemy("irving", irving, 0);
+                SpawnEnemy("irving", irving);
             }
             if (selma != 0) // 적 5 데이터가 0이 아닐 때
             {
-                SpawnEnemy("selma", selma, 0);
+                SpawnEnemy("selma", selma);
             }
             i++;
 
-            yield return new WaitForSeconds(10f); // 10초 대기
+            yield return new WaitForSeconds(0.1f); // 10초 대기
         }
     }
 
     // 적 오브젝트 스폰 메소드
-    private void SpawnEnemy(string name, int count, int time)
+    private void SpawnEnemy(string name, int count)
     {
         enemys = ObjectManager.instance.GetEnemy(name, count); // 적 count 만큼 리스트로 가져오기
 
