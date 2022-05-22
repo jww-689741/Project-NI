@@ -32,7 +32,7 @@ public class CameraManager : MonoBehaviour
         }
         if (cameraState == 2)
         {
-            this.transform.position = Vector3.Lerp(cameraPosition, new Vector3(player.position.x + 30f, player.position.y, player.position.z + 20f), Time.smoothDeltaTime * trackingSpeed);
+            this.transform.position = Vector3.Lerp(cameraPosition, new Vector3(player.position.x + 50f, player.position.y, player.position.z + 40f), Time.smoothDeltaTime * trackingSpeed);
         }
     }
 

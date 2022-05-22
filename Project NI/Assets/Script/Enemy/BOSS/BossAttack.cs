@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lol : MonoBehaviour
+public class BossAttack : MonoBehaviour
 {
     public GameObject hit; // 피격 효과
     public GameObject explosion; // 파괴 효과
     public float repeaterInterval = 2f;
+    public GameObject LaserEffect; // 레이저 오브젝트
 
     private Vector3 position = Vector3.zero; // 목표 지점 벡터 값, 이 값으로 오브젝트가 움직인다.
     private Transform enemyTransform; // 자기 자신의 좌표를 저장
@@ -14,6 +15,9 @@ public class Lol : MonoBehaviour
     private float currentHp; // 현재 HP저장 필드
     private float timer = 0; // 적 공격 간격 주는 타이머
     public static int score; // 스코어
+    private float attackTime = 5f; //레이저 공격 시간
+    private float attackTimeCalc = 5f; //레이저 공격 시간 계산
+
     private delegate void Control();
     Control control;
 
@@ -24,13 +28,15 @@ public class Lol : MonoBehaviour
 
     void Start()
     {
-        var status = GetComponent<SaraStatusManager>();
+        var status = GetComponent<BossStatusManager>();
         currentHp = status.GetHP();
         score = 0;
         player = GameObject.FindWithTag("Player").transform;
 
         control += CheckCameraPosition;
         control += CheckActiveCondition;
+
+        StartCoroutine(LaserOff());
     }
 
     void Update()
@@ -47,6 +53,24 @@ public class Lol : MonoBehaviour
             timer += Time.deltaTime;
         }
     }
+
+    IEnumerator LaserOff ()   // 레이저 OFF
+    { 
+        while(true)
+        {
+            yield return null;
+            if(LaserEffect.activeInHierarchy)
+            {
+                attackTimeCalc -= Time.deltaTime;
+                if(attackTimeCalc <= 0)
+                {
+                    attackTimeCalc = attackTime;
+                    LaserEffect.SetActive(false);
+                }
+            }
+        } 
+    }
+
 
     // 적 개체 축 고정
     void CheckCameraPosition()
@@ -84,7 +108,7 @@ public class Lol : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // 사라의 스탯을 가져옴
-        var saraStatus = GetComponent<SaraStatusManager>();
+        var bossStatus = GetComponent<BossStatusManager>();
         // 적 발사체 스탯 가져오기
         // 컴포넌트명은 달라질 수 있음
         Transform parent = other.gameObject.transform.parent; // 부모 오브젝트 가져오기
@@ -102,17 +126,17 @@ public class Lol : MonoBehaviour
                 if (DirectBulletStatus != null)
                 {
                     Instantiate(hit, this.transform.position, this.transform.rotation);
-                    currentHp -= (DirectBulletStatus.GetAttackDamage() - saraStatus.GetDefense());
+                    currentHp -= (DirectBulletStatus.GetAttackDamage() - bossStatus.GetDefense());
                     Debug.Log(currentHp);
                 }
                 else if (HowitzerBulletStatus != null)
                 {
-                    currentHp -= (HowitzerBulletStatus.GetAttackDamage() - saraStatus.GetDefense());
+                    currentHp -= (HowitzerBulletStatus.GetAttackDamage() - bossStatus.GetDefense());
                     Debug.Log(currentHp);
                 }
                 else if (MissleStatus != null)
                 {
-                    currentHp -= (MissleStatus.GetAttackDamage() - saraStatus.GetDefense());
+                    currentHp -= (MissleStatus.GetAttackDamage() - bossStatus.GetDefense());
                     Debug.Log(currentHp);
                 }
             }
@@ -127,17 +151,17 @@ public class Lol : MonoBehaviour
                 if (DirectBulletStatus != null)
                 {
                     Instantiate(hit, this.transform.position, this.transform.rotation);
-                    currentHp -= (DirectBulletStatus.GetAttackDamage() - saraStatus.GetDefense());
+                    currentHp -= (DirectBulletStatus.GetAttackDamage() - bossStatus.GetDefense());
                     Debug.Log(currentHp);
                 }
                 else if (HowitzerBulletStatus != null)
                 {
-                    currentHp -= (HowitzerBulletStatus.GetAttackDamage() - saraStatus.GetDefense());
+                    currentHp -= (HowitzerBulletStatus.GetAttackDamage() - bossStatus.GetDefense());
                     Debug.Log(currentHp);
                 }
                 else if (MissleStatus != null)
                 {
-                    currentHp -= (MissleStatus.GetAttackDamage() - saraStatus.GetDefense());
+                    currentHp -= (MissleStatus.GetAttackDamage() - bossStatus.GetDefense());
                     Debug.Log(currentHp);
                 }
             }
@@ -148,7 +172,7 @@ public class Lol : MonoBehaviour
 
     void CheckHP()
     {
-        var status = GetComponent<SaraStatusManager>();
+        var status = GetComponent<BossStatusManager>();
         if (currentHp <= 0)
         {
             this.gameObject.SetActive(false);
@@ -172,7 +196,7 @@ public class Lol : MonoBehaviour
 
         Vector3 bulletPosition = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 1.5f));
 
-        bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 50f)); // 위치 지정
+        bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 1.5f)); // 위치 지정
         var directionVector = (player.position - bulletPosition).normalized; // 탄환이 발사 될 방향벡터 연산
         bullet.transform.localRotation = Quaternion.LookRotation(directionVector);
         bullet.SetActive(true); // 활성화
