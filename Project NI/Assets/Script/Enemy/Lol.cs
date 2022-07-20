@@ -13,6 +13,10 @@ public class Lol : MonoBehaviour
     private Transform player; // 플레이어 좌표를 가져오기 위한 오브젝트
     private float currentHp; // 현재 HP저장 필드
     private float timer = 0; // 적 공격 간격 주는 타이머
+<<<<<<< HEAD
+=======
+    public static int score; // 스코어
+>>>>>>> origin/Pks
     private delegate void Control();
     Control control;
 
@@ -25,6 +29,10 @@ public class Lol : MonoBehaviour
     {
         var status = GetComponent<SaraStatusManager>();
         currentHp = status.GetHP();
+<<<<<<< HEAD
+=======
+        score = 0;
+>>>>>>> origin/Pks
         player = GameObject.FindWithTag("Player").transform;
 
         control += CheckCameraPosition;
@@ -140,6 +148,10 @@ public class Lol : MonoBehaviour
                 }
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/Pks
         CheckHP();
     }
 
@@ -148,10 +160,18 @@ public class Lol : MonoBehaviour
         var status = GetComponent<SaraStatusManager>();
         if (currentHp <= 0)
         {
+<<<<<<< HEAD
             // 파괴 효과
             Instantiate(explosion, this.transform.position, this.transform.rotation);
             this.gameObject.SetActive(false);
             GameManager.instance.score += 100; // 스코어 누적
+=======
+            this.gameObject.SetActive(false);
+            score += 6974;
+            Debug.Log(score + "t");
+            // 파괴 효과
+            Instantiate(explosion, this.transform.position, this.transform.rotation);
+>>>>>>> origin/Pks
         }
     }
 
@@ -168,18 +188,30 @@ public class Lol : MonoBehaviour
 
         Vector3 bulletPosition = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 1.5f));
 
+<<<<<<< HEAD
         bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 1.5f)); // 위치 지정
+=======
+        bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 50f)); // 위치 지정
+>>>>>>> origin/Pks
         var directionVector = (player.position - bulletPosition).normalized; // 탄환이 발사 될 방향벡터 연산
         bullet.transform.localRotation = Quaternion.LookRotation(directionVector);
         bullet.SetActive(true); // 활성화
 
         if (name == "DirectBullet")
         {
+<<<<<<< HEAD
             bullet.GetComponent<DirectBullet>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
         }
         else if (name == "HowitzerBullet")
         {
             bullet.GetComponent<HowitzerBullet>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
+=======
+            bullet.GetComponent<DirectBullet>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
+        }
+        else if (name == "HowitzerBullet")
+        {
+            bullet.GetComponent<HowitzerBullet>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
+>>>>>>> origin/Pks
         }
         else if (name == "Buckshot")
         {
@@ -187,7 +219,11 @@ public class Lol : MonoBehaviour
             {
                 bullet.transform.GetChild(i).transform.position = bullet.transform.position;  //자식 오브젝트 부모와 동일한 위치로 이동
             }
+<<<<<<< HEAD
             bullet.GetComponent<BuckShot>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
+=======
+            bullet.GetComponent<BuckShot>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
+>>>>>>> origin/Pks
         }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyContorl : MonoBehaviour
+public class EnemyControl : MonoBehaviour
 {
     public float generationGap;
     public Transform player; // 플레이어 좌표를 저장

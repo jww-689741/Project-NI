@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class SpinnerBullet : MonoBehaviour, IBulletShot
 {
+<<<<<<< HEAD
     public IEnumerator Shot()
+=======
+    public IEnumerator Shot(Vector3 directionVector)
+>>>>>>> origin/Pks
     {
         var status = GetComponent<SpinnerBulletStausManager>();
         var timer = 0f; // 전체 탄 지속시간용
@@ -45,10 +49,13 @@ public class SpinnerBullet : MonoBehaviour, IBulletShot
         var status = GetComponent<SpinnerBulletStausManager>();
         return status.GetAttackSpeed();
     }
+<<<<<<< HEAD
 
     public float GetAttackDamageToBullet()
     {
         var status = GetComponent<SpinnerBulletStausManager>();
         return status.GetAttackDamage();
     }
+=======
+>>>>>>> origin/Pks
 }

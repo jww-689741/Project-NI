@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class HowitzerBullet : MonoBehaviour, IBulletShot
 {
+<<<<<<< HEAD
+=======
+    public GameObject explosion; // 파괴 효과
+>>>>>>> origin/Pks
     public float GetAttackSpeedToBullet()
     {
         var status = GetComponent<HowitzerBulletStatusManager>(); // 곡사탄환의 스탯 데이터 접근
         return status.GetAttackSpeed();
     }
 
+<<<<<<< HEAD
     public IEnumerator Shot()
     {
         var status = GetComponent<HowitzerBulletStatusManager>(); // 곡사탄환의 스탯 데이터 접근
@@ -17,6 +22,15 @@ public class HowitzerBullet : MonoBehaviour, IBulletShot
         yield return new WaitForSeconds(0.01f);   // 0.2초 대기
 
         float target_Distance = 50f; // 대상거리
+=======
+    public IEnumerator Shot(Vector3 directionVector)
+    {
+        var status = GetComponent<HowitzerBulletStatusManager>(); // 곡사탄환의 스탯 데이터 접근
+        var gravity = -Physics.gravity.y; // 중력값
+        //yield return new WaitForSeconds(0.01f);   // 0.2초 대기
+
+        float target_Distance = 30f; // 대상거리
+>>>>>>> origin/Pks
 
         //지정된 각도에서 대상에 오브젝트를 던지는 데 필요한 속도를 계산
         float projectile_Velocity = target_Distance / (Mathf.Sin(2 * status.GetFiringAngle() * Mathf.Deg2Rad) / gravity);
@@ -39,9 +53,22 @@ public class HowitzerBullet : MonoBehaviour, IBulletShot
         this.gameObject.SetActive(false); // 비활성화
     }
 
+<<<<<<< HEAD
     public float GetAttackDamageToBullet()
     {
         var status = GetComponent<HowitzerBulletStatusManager>(); // 곡사탄환의 스탯 데이터 접근
         return status.GetAttackDamage();
     }
+=======
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            Instantiate(explosion, this.transform.position, this.transform.rotation);
+            this.gameObject.SetActive(false);
+            //explosion.SetActive(false);
+        }
+    }
+
+>>>>>>> origin/Pks
 }

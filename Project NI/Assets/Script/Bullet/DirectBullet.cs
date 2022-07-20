@@ -1,5 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+<<<<<<< HEAD
+=======
+using System.Runtime.InteropServices;
+>>>>>>> origin/Pks
 using UnityEngine;
 
 public class DirectBullet : MonoBehaviour, IBulletShot
@@ -12,6 +16,7 @@ public class DirectBullet : MonoBehaviour, IBulletShot
         return status.GetAttackSpeed(); // 공격속도 값 반환
     }
 
+<<<<<<< HEAD
     public float GetAttackDamageToBullet()
     {
         var status = GetComponent<DirectBulletStatusManager>(); // 직사탄환의 스탯 데이터 접근
@@ -20,6 +25,10 @@ public class DirectBullet : MonoBehaviour, IBulletShot
 
     // 발사 추상 코루틴 재정의
     public IEnumerator Shot()
+=======
+    // 발사 추상 코루틴 재정의
+    public IEnumerator Shot(Vector3 directionVector)
+>>>>>>> origin/Pks
     {
         var status = GetComponent<DirectBulletStatusManager>(); // 직사탄환의 스탯 데이터 접근
         float timer = 0;

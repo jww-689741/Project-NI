@@ -8,6 +8,7 @@ public class ChaserBullet : MonoBehaviour
     [SerializeField] LayerMask m_layerMask = 0; //원하는 레이어만 검출해주는 LayerMask 선언
     private Transform m_tfTarget = null; //transform 변수
     private float m_currentSpeed = 0f;   //미사일 현재속도
+<<<<<<< HEAD
 
     public float GetAttackDamageToBullet()
     {
@@ -19,6 +20,12 @@ public class ChaserBullet : MonoBehaviour
     public IEnumerator Shot(Vector3 directionVector)
     {
         var status = GetComponent<ChaserBulletStatusManager>(); // 직사탄환의 스탯 데이터 접근
+=======
+    // 발사 추상 코루틴 재정의
+    public IEnumerator Shot(Vector3 directionVector)
+    {
+        var status = GetComponent<ChaserBulletStatusManager>(); // 유도탄환의 스탯 데이터 접근
+>>>>>>> origin/Pks
         float timer = 0;
         //SearchEnemy(); //적 탐지
         while (true)

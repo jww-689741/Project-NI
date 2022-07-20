@@ -65,10 +65,13 @@ public class MissileBomb : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+<<<<<<< HEAD
 
     public float GetAttackDamageToBullet()
     {
         var status = GetComponent<MissileStatusManager>(); // 직사탄환의 스탯 데이터 접근
         return status.GetAttackDamage(); // 공격력 값 반환
     }
+=======
+>>>>>>> origin/Pks
 }

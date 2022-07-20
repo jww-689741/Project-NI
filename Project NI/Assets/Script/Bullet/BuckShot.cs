@@ -10,7 +10,11 @@ public class BuckShot : MonoBehaviour, IBulletShot
         return status.GetAttackSpeed(); // 공격속도 값 반환
     }
 
+<<<<<<< HEAD
     public IEnumerator Shot()
+=======
+    public IEnumerator Shot(Vector3 directionVector)
+>>>>>>> origin/Pks
     {
         var status = GetComponent<DirectBulletStatusManager>(); // 직사탄환의 스탯 데이터 접근
         float timer = 0;
@@ -27,10 +31,13 @@ public class BuckShot : MonoBehaviour, IBulletShot
 
         this.gameObject.SetActive(false); // 비활성화
     }
+<<<<<<< HEAD
 
     public float GetAttackDamageToBullet()
     {
         var status = GetComponent<DirectBulletStatusManager>(); // 직사탄환의 스탯 데이터 접근
         return status.GetAttackDamage(); // 공격력 값 반환
     }
+=======
+>>>>>>> origin/Pks
 }

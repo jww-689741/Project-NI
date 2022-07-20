@@ -45,4 +45,21 @@ public class PlayerStat : ScriptableObject
     [SerializeField]
     private float attackSpeed;
     public float AttackSpeed { get { return attackSpeed; } }
+<<<<<<< HEAD
+=======
+
+    public void StatUp(string name)
+    {
+        if (name.Equals("WapponUp"))
+        {
+            attackDamage += 10;
+        }else if(name.Equals("ShieldUp"))
+        {
+            defense += 10;
+        }else if (name.Equals("HPUp"))
+        {
+            hp += 100;
+        }
+    }
+>>>>>>> origin/Pks
 }

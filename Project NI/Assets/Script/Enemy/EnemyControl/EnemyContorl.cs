@@ -19,7 +19,11 @@ public class EnemyContorl : MonoBehaviour
 
     void Start()
     {
+<<<<<<< HEAD
         StartCoroutine(startSpawn()); // 코루틴 시작
+=======
+        //StartCoroutine(startSpawn()); // 코루틴 시작
+>>>>>>> origin/Pks
     }
 
     void Update()
@@ -75,7 +79,11 @@ public class EnemyContorl : MonoBehaviour
     // 적 오브젝트 스폰 메소드
     private void SpawnEnemy(string name, int count)
     {
+<<<<<<< HEAD
         enemys = ObjectManager.instance.GetEnemy(name, count); // 적 count 만큼 리스트로 가져오기
+=======
+        this.enemys = ObjectManager.instance.GetEnemy(name, count); // 적 count 만큼 리스트로 가져오기
+>>>>>>> origin/Pks
 
         for (int i = 0; i < count; i++) // 리스트의 오브젝트들
         {
