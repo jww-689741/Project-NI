@@ -5,10 +5,14 @@ using UnityEngine;
 public class SpinnerBullet : MonoBehaviour, IBulletShot
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     public IEnumerator Shot()
 =======
     public IEnumerator Shot(Vector3 directionVector)
 >>>>>>> origin/Pks
+=======
+    public IEnumerator Shot(Vector3 directionVector)
+>>>>>>> origin/Jms
     {
         var status = GetComponent<SpinnerBulletStausManager>();
         var timer = 0f; // 전체 탄 지속시간용
@@ -24,7 +28,11 @@ public class SpinnerBullet : MonoBehaviour, IBulletShot
             timer += Time.deltaTime;
             if (timer < status.GetAttackSpeed()) // 0.5초동안 중앙 탄 전방 발사
             {
+<<<<<<< HEAD
                 bulletTransform.Translate(Vector3.forward * Time.deltaTime * status.GetShotSpeed());
+=======
+                bulletTransform.Translate(directionVector * Time.deltaTime * status.GetShotSpeed());
+>>>>>>> origin/Jms
             }
             else if (timer > status.GetHoldingTime()) break; // 유지시간을 넘어가면 루프 아웃
             else
@@ -50,6 +58,7 @@ public class SpinnerBullet : MonoBehaviour, IBulletShot
         return status.GetAttackSpeed();
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     public float GetAttackDamageToBullet()
     {
@@ -58,4 +67,6 @@ public class SpinnerBullet : MonoBehaviour, IBulletShot
     }
 =======
 >>>>>>> origin/Pks
+=======
+>>>>>>> origin/Jms
 }

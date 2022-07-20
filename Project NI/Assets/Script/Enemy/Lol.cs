@@ -14,9 +14,12 @@ public class Lol : MonoBehaviour
     private float currentHp; // 현재 HP저장 필드
     private float timer = 0; // 적 공격 간격 주는 타이머
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     public static int score; // 스코어
 >>>>>>> origin/Pks
+=======
+>>>>>>> origin/Jms
     private delegate void Control();
     Control control;
 
@@ -30,9 +33,12 @@ public class Lol : MonoBehaviour
         var status = GetComponent<SaraStatusManager>();
         currentHp = status.GetHP();
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         score = 0;
 >>>>>>> origin/Pks
+=======
+>>>>>>> origin/Jms
         player = GameObject.FindWithTag("Player").transform;
 
         control += CheckCameraPosition;
@@ -100,6 +106,7 @@ public class Lol : MonoBehaviour
 
         if (other.gameObject.transform.parent != null) // 부모 오브젝트가 있을 때
         {
+<<<<<<< HEAD
             if (parent.CompareTag("Bullet") || parent.CompareTag("Missile")) // 부모의 태그가 FX일 때
             {
                 other.gameObject.SetActive(false); // 충돌한 탄환 오브젝트 비활성화
@@ -120,6 +127,24 @@ public class Lol : MonoBehaviour
                 {
                     currentHp -= (MissleStatus.GetAttackDamage() - saraStatus.GetDefense());
                     Debug.Log(currentHp);
+=======
+            if (parent.CompareTag("Bullet") || parent.CompareTag("Missile")) // 부모의 태그
+            {
+                other.gameObject.SetActive(false); // 충돌한 탄환 오브젝트 비활성화
+
+                if (DirectBulletStatus != null)
+                {
+                    Instantiate(hit, this.transform.position, this.transform.rotation);
+                    currentHp -= GameManager.instance.GetDamage(1,saraStatus.GetDefense(), DirectBulletStatus.GetAttackDamage());
+                }
+                else if (HowitzerBulletStatus != null)
+                {
+                    currentHp -= GameManager.instance.GetDamage(1, saraStatus.GetDefense(), HowitzerBulletStatus.GetAttackDamage());
+                }
+                else if (MissleStatus != null)
+                {
+                    currentHp -= GameManager.instance.GetDamage(1, saraStatus.GetDefense(), MissleStatus.GetAttackDamage());
+>>>>>>> origin/Jms
                 }
             }
             else if (other.CompareTag("Bullet") || parent.CompareTag("Missile"))
@@ -133,25 +158,41 @@ public class Lol : MonoBehaviour
                 if (DirectBulletStatus != null)
                 {
                     Instantiate(hit, this.transform.position, this.transform.rotation);
+<<<<<<< HEAD
                     currentHp -= (DirectBulletStatus.GetAttackDamage() - saraStatus.GetDefense());
                     Debug.Log(currentHp);
                 }
                 else if (HowitzerBulletStatus != null)
                 {
                     currentHp -= (HowitzerBulletStatus.GetAttackDamage() - saraStatus.GetDefense());
+=======
+                    currentHp -= GameManager.instance.GetDamage(1, saraStatus.GetDefense(), DirectBulletStatus.GetAttackDamage());
+                }
+                else if (HowitzerBulletStatus != null)
+                {
+                    currentHp -= GameManager.instance.GetDamage(1, saraStatus.GetDefense(), HowitzerBulletStatus.GetAttackDamage());
+>>>>>>> origin/Jms
                     Debug.Log(currentHp);
                 }
                 else if (MissleStatus != null)
                 {
+<<<<<<< HEAD
                     currentHp -= (MissleStatus.GetAttackDamage() - saraStatus.GetDefense());
+=======
+                    currentHp -= GameManager.instance.GetDamage(1, saraStatus.GetDefense(), MissleStatus.GetAttackDamage());
+>>>>>>> origin/Jms
                     Debug.Log(currentHp);
                 }
             }
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> origin/Pks
+=======
+
+>>>>>>> origin/Jms
         CheckHP();
     }
 
@@ -161,10 +202,14 @@ public class Lol : MonoBehaviour
         if (currentHp <= 0)
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/Jms
             // 파괴 효과
             Instantiate(explosion, this.transform.position, this.transform.rotation);
             this.gameObject.SetActive(false);
             GameManager.instance.score += 100; // 스코어 누적
+<<<<<<< HEAD
 =======
             this.gameObject.SetActive(false);
             score += 6974;
@@ -172,6 +217,8 @@ public class Lol : MonoBehaviour
             // 파괴 효과
             Instantiate(explosion, this.transform.position, this.transform.rotation);
 >>>>>>> origin/Pks
+=======
+>>>>>>> origin/Jms
         }
     }
 
@@ -189,10 +236,14 @@ public class Lol : MonoBehaviour
         Vector3 bulletPosition = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 1.5f));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 1.5f)); // 위치 지정
 =======
         bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 50f)); // 위치 지정
 >>>>>>> origin/Pks
+=======
+        bullet.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.z - 1.5f)); // 위치 지정
+>>>>>>> origin/Jms
         var directionVector = (player.position - bulletPosition).normalized; // 탄환이 발사 될 방향벡터 연산
         bullet.transform.localRotation = Quaternion.LookRotation(directionVector);
         bullet.SetActive(true); // 활성화
@@ -200,11 +251,15 @@ public class Lol : MonoBehaviour
         if (name == "DirectBullet")
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/Jms
             bullet.GetComponent<DirectBullet>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
         }
         else if (name == "HowitzerBullet")
         {
             bullet.GetComponent<HowitzerBullet>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
+<<<<<<< HEAD
 =======
             bullet.GetComponent<DirectBullet>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
         }
@@ -212,6 +267,8 @@ public class Lol : MonoBehaviour
         {
             bullet.GetComponent<HowitzerBullet>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
 >>>>>>> origin/Pks
+=======
+>>>>>>> origin/Jms
         }
         else if (name == "Buckshot")
         {
@@ -220,10 +277,14 @@ public class Lol : MonoBehaviour
                 bullet.transform.GetChild(i).transform.position = bullet.transform.position;  //자식 오브젝트 부모와 동일한 위치로 이동
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             bullet.GetComponent<BuckShot>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
 =======
             bullet.GetComponent<BuckShot>().StartCoroutine("Shot", directionVector); // 탄환 동작 로직 코루틴 시작
 >>>>>>> origin/Pks
+=======
+            bullet.GetComponent<BuckShot>().StartCoroutine("Shot"); // 탄환 동작 로직 코루틴 시작
+>>>>>>> origin/Jms
         }
     }
 }

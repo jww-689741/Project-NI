@@ -11,6 +11,7 @@ public class EnemyContorl : MonoBehaviour
     private Vector3 position = Vector3.zero; // 스폰 지점 값
     private List<int> numberOfEnemy = new List<int>(); // 적 생성 개체 수 리스트, List를 사용한 이유는 없으니 다른 리스트로 변경해도 무방
     private List<Dictionary<string, object>> data;
+<<<<<<< HEAD
 
     void Awake()
     {
@@ -24,6 +25,13 @@ public class EnemyContorl : MonoBehaviour
 =======
         //StartCoroutine(startSpawn()); // 코루틴 시작
 >>>>>>> origin/Pks
+=======
+    private int count = 1;
+
+    void Start()
+    {
+        StartCoroutine(startSpawn()); // 코루틴 시작
+>>>>>>> origin/Jms
     }
 
     void Update()
@@ -34,6 +42,7 @@ public class EnemyContorl : MonoBehaviour
     private IEnumerator startSpawn()
     {
         int i = 0; // counts 용
+<<<<<<< HEAD
 
         int sara, billy, betty, irving, selma; // 각 개체수 저장
 
@@ -41,6 +50,17 @@ public class EnemyContorl : MonoBehaviour
         {
             if (data.Count - 1 == i) // data에 더이상 값이 없을 경우
             {
+=======
+        int sara, billy, betty, irving, selma; // 각 개체수 저장
+        data = ReadCSV.Read("Stage" + count + "Information");
+
+        while (true)
+        {
+            if (data.Count - 1 == i) // data에 더이상 값이 없을 경우
+            {
+                count++;
+                StartCoroutine(startSpawn()); // 코루틴 시작
+>>>>>>> origin/Jms
                 break; //반복문이 종료된다.
             }
 
@@ -72,7 +92,11 @@ public class EnemyContorl : MonoBehaviour
             }
             i++;
 
+<<<<<<< HEAD
             yield return new WaitForSeconds(10f); // 10초 대기
+=======
+            yield return new WaitForSeconds(0.1f); // 10초 대기
+>>>>>>> origin/Jms
         }
     }
 
@@ -80,10 +104,14 @@ public class EnemyContorl : MonoBehaviour
     private void SpawnEnemy(string name, int count)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         enemys = ObjectManager.instance.GetEnemy(name, count); // 적 count 만큼 리스트로 가져오기
 =======
         this.enemys = ObjectManager.instance.GetEnemy(name, count); // 적 count 만큼 리스트로 가져오기
 >>>>>>> origin/Pks
+=======
+        enemys = ObjectManager.instance.GetEnemy(name, count); // 적 count 만큼 리스트로 가져오기
+>>>>>>> origin/Jms
 
         for (int i = 0; i < count; i++) // 리스트의 오브젝트들
         {

@@ -46,6 +46,7 @@ public class PlayerStat : ScriptableObject
     private float attackSpeed;
     public float AttackSpeed { get { return attackSpeed; } }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
     public void StatUp(string name)
@@ -62,4 +63,6 @@ public class PlayerStat : ScriptableObject
         }
     }
 >>>>>>> origin/Pks
+=======
+>>>>>>> origin/Jms
 }

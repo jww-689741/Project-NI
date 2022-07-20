@@ -94,6 +94,18 @@ public class ObjectManager : MonoBehaviour
             }
         }
 
+<<<<<<< HEAD
+=======
+        if (iteminfo.Length == 1) SetItem(iteminfo[0].prefab, iteminfo[0].count, iteminfo[0].name); // 리스트의 내용이 하나일 경우
+        else if (iteminfo.Length > 1) // 리스트의 내용이 둘 이상인 경우
+        {
+            for (int i = 0; i < iteminfo.Length; i++)
+            {
+                SetItem(iteminfo[i].prefab, iteminfo[i].count, iteminfo[i].name);
+            }
+        }
+
+>>>>>>> origin/Jms
     }
 
     // 탄환 생성, 속성 입력, 리스트 삽입
@@ -133,8 +145,13 @@ public class ObjectManager : MonoBehaviour
             clone.transform.name = name; // 이름
             clone.transform.localPosition = Vector3.zero; // 위치
             clone.SetActive(false); // 비활성화
+<<<<<<< HEAD
             clone.transform.parent = enemyPool; // 부모 오브젝트 설정
             enemyList.Add(clone); // 리스트 삽입
+=======
+            clone.transform.parent = itemPool; // 부모 오브젝트 설정
+            itemList.Add(clone); // 리스트 삽입
+>>>>>>> origin/Jms
         }
     }
 
@@ -217,6 +234,44 @@ public class ObjectManager : MonoBehaviour
         return target;
     }
 
+<<<<<<< HEAD
+=======
+    // 아이템 호출
+    public GameObject GetItem(string name)
+    {
+        if (itemList == null) return null; // 리스트가 비어있으면 null 반환
+        int listCount = itemList.Count;
+        int targetCount = 0;
+        GameObject targetItem;
+        for (int i = 0; i < listCount; i++)
+        {
+            if (name != itemList[i].name) continue; // 찾는 이름의 아이템이 없으면 넘어감
+            else ++targetCount;
+        }
+
+        for (int i = 0; i < listCount; i++)
+        {
+            if (name != itemList[i].name) continue; // 찾는 이름의 아이템이 없으면 넘어감
+            else
+            {
+                targetItem = itemList[i]; // 찾는 아이템의 오브젝트
+            }
+
+            if (targetItem.activeSelf == true) // 아이템이 활성화 시
+            {
+                if (i == targetCount - 1) // 리스트 내 모든 아이템이 활성화 상태일 때
+                {
+                    SetItem(targetItem, 1, targetItem.name); // 새로운 아이템 1개 추가
+                    return itemList[listCount + 1]; // 새로 생성된 아이템 반환
+                }
+                continue;
+            }
+            return itemList[i]; // 비활성화 상태인 아이템 반환
+        }
+        return null; // 호출 할 아이템의 이름을 찾지 못한 경우 null반환
+    }
+
+>>>>>>> origin/Jms
     // 메모리 할당 해제
     public void MemoryClear()
     {

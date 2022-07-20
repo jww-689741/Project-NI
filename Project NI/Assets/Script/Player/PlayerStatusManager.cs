@@ -47,6 +47,7 @@ public class PlayerStatusManager : MonoBehaviour
         return statusData.AttackSpeed;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     public void SetStatUp(string name)
     {
@@ -54,4 +55,6 @@ public class PlayerStatusManager : MonoBehaviour
     }
 
 >>>>>>> origin/Pks
+=======
+>>>>>>> origin/Jms
 }

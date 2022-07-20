@@ -33,10 +33,14 @@ public class CameraManager : MonoBehaviour
         if (cameraState == 2)
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             this.transform.position = Vector3.Lerp(cameraPosition, new Vector3(player.position.x + 30f, player.position.y, player.position.z + 20f), Time.smoothDeltaTime * trackingSpeed);
 =======
             this.transform.position = Vector3.Lerp(cameraPosition, new Vector3(player.position.x + 50f, player.position.y, player.position.z + 40f), Time.smoothDeltaTime * trackingSpeed);
 >>>>>>> origin/Pks
+=======
+            this.transform.position = Vector3.Lerp(cameraPosition, new Vector3(player.position.x + 30f, player.position.y, player.position.z + 20f), Time.smoothDeltaTime * trackingSpeed);
+>>>>>>> origin/Jms
         }
     }
 
@@ -49,7 +53,11 @@ public class CameraManager : MonoBehaviour
         {
             this.transform.position = Vector3.Lerp(cameraPosition, new Vector3(player.position.x, player.position.y + 3f, player.position.z - 10f), Time.smoothDeltaTime * trackingSpeed);
             this.transform.localRotation = Quaternion.Euler(0, 0, 0);
+<<<<<<< HEAD
             GetComponent<BoxCollider>().center = new Vector3(0, 0, 150);
+=======
+            GetComponent<BoxCollider>().center = new Vector3(0, 0, 40);
+>>>>>>> origin/Jms
             cameraState = 0;
             Debug.Log("SetBackview");
         }
